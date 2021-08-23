@@ -2,7 +2,8 @@ package routes
 
 import (
 	"gin_restful_graphql/app/controllers/GuideController"
-	middleware "gin_restful_graphql/app/middleware/headerAuth"
+	"gin_restful_graphql/app/middleware/headerAuth"
+	"gin_restful_graphql/app/middleware/rateLimit"
 
 	"net/http"
 	"os"
@@ -16,7 +17,7 @@ func SetupRouter() *gin.Engine {
 
 	// RESTful >>>
 	// v1 >>>
-	apiv1Group := r.Group("/api/v1", middleware.VerifyHeaderAuth())
+	apiv1Group := r.Group("/api/v1", rateLimit.RateLimitToken(), headerAuth.VerifyHeaderAuth())
 	apiv1Group.GET("/guide", GuideController.GetGuide)
 	apiv1Group.GET("/guide/:id", GuideController.GetGuide)
 	apiv1Group.POST("/guide", GuideController.PostGuide)
@@ -30,7 +31,7 @@ func SetupRouter() *gin.Engine {
 	// GraphQL <<<
 
 	// Kimi 測試區 >>>
-	kimiGroup := r.Group("/kimi")
+	kimiGroup := r.Group("/kimi", rateLimit.RateLimitLeaky())
 	kimiGroup.GET("/", func(c *gin.Context) {
 		result := map[string]interface{}{
 			"Data": map[string]interface{}{
