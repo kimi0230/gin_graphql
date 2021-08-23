@@ -12,7 +12,7 @@ var SUCCESS = map[string]interface{}{
 var BAD_REQUEST = map[string]interface{}{
 	"code":     "2400",
 	"status":   false,
-	"message":  "BadRequest",
+	"message":  "Bad Request",
 	"httpCode": http.StatusBadRequest,
 }
 

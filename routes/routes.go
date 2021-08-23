@@ -37,6 +37,9 @@ func SetupRouter() *gin.Engine {
 	// RESTful >>>
 	apiv1Group.GET("/guide", GuideController.GetGuide)
 	apiv1Group.GET("/guide/:id", GuideController.GetGuide)
+	apiv1Group.POST("/guide", GuideController.PostGuide)
+	apiv1Group.PUT("/guide/:id", GuideController.PutGuide)
+	apiv1Group.DELETE("/guide/:id", GuideController.DeleteGuide)
 	// RESTful <<<
 
 	// GraphQL >>>
