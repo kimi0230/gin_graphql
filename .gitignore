@@ -1,0 +1,10 @@
+/tmp/*
+/logs/**
+!/logs/README.md
+/vendor/**
+!/vendor/vendor.json
+stdout.log
+
+.env
+.env.dev
+.env.qa
