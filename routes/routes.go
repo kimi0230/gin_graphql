@@ -14,6 +14,22 @@ import (
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
+	// RESTful >>>
+	// v1 >>>
+	apiv1Group := r.Group("/api/v1", middleware.VerifyHeaderAuth())
+	apiv1Group.GET("/guide", GuideController.GetGuide)
+	apiv1Group.GET("/guide/:id", GuideController.GetGuide)
+	apiv1Group.POST("/guide", GuideController.PostGuide)
+	apiv1Group.PUT("/guide/:id", GuideController.PutGuide)
+	apiv1Group.DELETE("/guide/:id", GuideController.DeleteGuide)
+	// v1 <<<
+	// RESTful <<<
+
+	// GraphQL >>>
+
+	// GraphQL <<<
+
+	// Kimi 測試區 >>>
 	kimiGroup := r.Group("/kimi")
 	kimiGroup.GET("/", func(c *gin.Context) {
 		result := map[string]interface{}{
@@ -32,19 +48,7 @@ func SetupRouter() *gin.Engine {
 		}
 		c.JSON(http.StatusOK, result)
 	})
-
-	apiv1Group := r.Group("/api/v1", middleware.VerifyHeaderAuth())
-	// RESTful >>>
-	apiv1Group.GET("/guide", GuideController.GetGuide)
-	apiv1Group.GET("/guide/:id", GuideController.GetGuide)
-	apiv1Group.POST("/guide", GuideController.PostGuide)
-	apiv1Group.PUT("/guide/:id", GuideController.PutGuide)
-	apiv1Group.DELETE("/guide/:id", GuideController.DeleteGuide)
-	// RESTful <<<
-
-	// GraphQL >>>
-
-	// GraphQL <<<
+	// Kimi 測試區 <<<
 
 	return r
 }

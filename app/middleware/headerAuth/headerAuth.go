@@ -1,11 +1,9 @@
 package middleware
 
 import (
-	"bytes"
 	"fmt"
 	ginServices "gin_restful_graphql/app/services/ginService"
 	"gin_restful_graphql/config/errorCode"
-	"io/ioutil"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -39,27 +37,29 @@ func VerifyHeaderAuth() gin.HandlerFunc {
 		// TODO: 檢查token
 		fmt.Println("token =  ", token)
 		fmt.Println("Lang =  ", reqJSON.Lang)
+		/*
+			// 取出 body
+			if c.Request.Method == "GET" {
+				reqData = c.Request.URL.Query()
+			} else {
+				// 取得body資料
+				data, err := c.GetRawData()
+				if err != nil {
+					fmt.Println(err.Error())
+				}
+				reqData = ioutil.NopCloser(bytes.NewBuffer(data))
+				// 因為body只能取一次,再把request補回去
+				c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(data))
 
-		if c.Request.Method == "GET" {
-			reqData = c.Request.URL.Query()
-		} else {
-			// 取得body資料
-			data, err := c.GetRawData()
-			if err != nil {
-				fmt.Println(err.Error())
+				if bindErr := c.ShouldBind(&reqJSON); bindErr != nil {
+					ginServices.GinRespone(c, reqData, "", errorCode.PARAMS_INVALID, bindErr)
+					c.Abort()
+					return
+				}
+				// 因為body只能取一次,再把request補回去
+				c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(data))
 			}
-			reqData = ioutil.NopCloser(bytes.NewBuffer(data))
-			// 因為body只能取一次,再把request補回去
-			c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(data))
-
-			if bindErr := c.ShouldBind(&reqJSON); bindErr != nil {
-				ginServices.GinRespone(c, reqData, "", errorCode.PARAMS_INVALID, bindErr)
-				c.Abort()
-				return
-			}
-			// 因為body只能取一次,再把request補回去
-			c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(data))
-		}
+		*/
 
 		c.Set("token", token)
 		c.Next()
