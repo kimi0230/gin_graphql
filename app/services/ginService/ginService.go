@@ -1,4 +1,4 @@
-package services
+package ginServices
 
 import (
 	"bytes"
@@ -61,7 +61,7 @@ func GinRequest(c *gin.Context, reqJSON interface{}) (interface{}, error) {
  * @param {interface{}} err
  * @return {*}
  */
-func GinRespone(c *gin.Context, resquestData interface{}, responseData interface{}, resultStatus bool, resultMsg map[string]interface{}, err interface{}) {
+func GinRespone(c *gin.Context, resquestData interface{}, responseData interface{}, resultMsg map[string]interface{}, err interface{}) {
 	var response ResponseObj
 	if responseData == "" || responseData == nil {
 		response.Data = nil
@@ -69,9 +69,9 @@ func GinRespone(c *gin.Context, resquestData interface{}, responseData interface
 		response.Data = responseData
 	}
 	env := os.Getenv("APP_ENV")
-	response.Result = ResultObj{Status: resultStatus, Code: resultMsg["code"].(string), Message: resultMsg["message"].(string)}
+	response.Result = ResultObj{Status: resultMsg["status"].(bool), Code: resultMsg["code"].(string), Message: resultMsg["message"].(string)}
 
-	if resultStatus {
+	if resultMsg["status"].(bool) {
 		WriteLog(c, resquestData, response)
 	} else {
 		WriteLogError(c, resquestData, response, err)

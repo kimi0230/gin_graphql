@@ -3,7 +3,7 @@ package middleware
 import (
 	"bytes"
 	"fmt"
-	services "gin_restful_graphql/app/services/ginService"
+	ginServices "gin_restful_graphql/app/services/ginService"
 	"gin_restful_graphql/config/errorCode"
 	"io/ioutil"
 	"strings"
@@ -24,13 +24,13 @@ func VerifyHeaderAuth() gin.HandlerFunc {
 
 		// 檢查 Header
 		if bindErr := c.ShouldBindHeader(&reqJSON); bindErr != nil {
-			services.GinRespone(c, reqData, "", false, errorCode.PARAMS_INVALID, bindErr)
+			ginServices.GinRespone(c, reqData, "", errorCode.PARAMS_INVALID, bindErr)
 			c.Abort()
 			return
 		}
 		headerAuth := strings.Split(reqJSON.Authorization, " ")
 		if headerAuth[0] != "Bearer" {
-			services.GinRespone(c, reqData, "", false, errorCode.FORBIDDEN, nil)
+			ginServices.GinRespone(c, reqData, "", errorCode.FORBIDDEN, nil)
 			c.Abort()
 			return
 		}
@@ -53,7 +53,7 @@ func VerifyHeaderAuth() gin.HandlerFunc {
 			c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(data))
 
 			if bindErr := c.ShouldBind(&reqJSON); bindErr != nil {
-				services.GinRespone(c, reqData, "", false, errorCode.PARAMS_INVALID, bindErr)
+				ginServices.GinRespone(c, reqData, "", errorCode.PARAMS_INVALID, bindErr)
 				c.Abort()
 				return
 			}
