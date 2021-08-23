@@ -1,2 +1,0 @@
-time="2021-08-23T10:42:54+08:00" level=info msg="===== Start Server ===== " env=dev ip=127.0.0.1/8 port=":5566"
-time="2021-08-23T10:43:43+08:00" level=info msg="===== Start Server ===== " env=dev ip=127.0.0.1/8 port=":5566"
