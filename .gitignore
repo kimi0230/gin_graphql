@@ -1,8 +1,5 @@
 /tmp/*
-/logs/**
-!/logs/README.md
-/vendor/**
-!/vendor/vendor.json
+/logs/*.log
 stdout.log
 
 .env
