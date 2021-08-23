@@ -1,6 +1,9 @@
 package routes
 
 import (
+	"gin_restful_graphql/app/controllers/GuideController"
+	middleware "gin_restful_graphql/app/middleware/headerAuth"
+
 	"net/http"
 	"os"
 	"time"
@@ -29,6 +32,16 @@ func SetupRouter() *gin.Engine {
 		}
 		c.JSON(http.StatusOK, result)
 	})
+
+	apiv1Group := r.Group("/api/v1", middleware.VerifyHeaderAuth())
+	// RESTful >>>
+	apiv1Group.GET("/guide", GuideController.GetGuide)
+	apiv1Group.GET("/guide/:id", GuideController.GetGuide)
+	// RESTful <<<
+
+	// GraphQL >>>
+
+	// GraphQL <<<
 
 	return r
 }

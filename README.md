@@ -1,7 +1,7 @@
-# Gin Restful GraphQL
+# Gin RESTful GraphQL
 
 
-## Init
+## Initiation
 ```shell
 go mod init  
 go mod tidy
