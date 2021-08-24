@@ -6,9 +6,13 @@ import (
 	"time"
 
 	"gin_graphql/app/validation/customValidateV9"
+	"gin_graphql/graph"
+	"gin_graphql/graph/generated"
 	"gin_graphql/routes"
 	"os"
 
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
@@ -18,6 +22,8 @@ import (
 	"github.com/joho/godotenv"
 	_ "github.com/joho/godotenv"
 )
+
+const defaultGraphQLPort = "8080"
 
 func init() {
 	log.SetLevel(log.InfoLevel)
@@ -86,6 +92,22 @@ func main() {
 		godotenv.Load("./.env.dev")
 	}
 
+	// GraphQL Server
+	graphQLPort := os.Getenv("GRAPHQL_PORT")
+	if graphQLPort == "" {
+		graphQLPort = defaultGraphQLPort
+	}
+
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+
+	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	http.Handle("/query", srv)
+
+	go func() {
+		log.Printf("connect to http://localhost:%s/ for GraphQL playground", graphQLPort)
+		log.Fatal(http.ListenAndServe(":"+graphQLPort, nil))
+	}()
+
 	// GIN binding validation version
 	customValidateV9.Start()
 
@@ -100,7 +122,7 @@ func main() {
 		"env":  env,
 	}).Info("===== Start Server ===== ")
 
-	if os.Getenv("pprof") == "1" {
+	if os.Getenv("PPROF") == "1" {
 		// pprof.Register(r) // 性能
 		adminGroup := r.Group("/admin", func(c *gin.Context) {
 			if c.Request.Header.Get("Authorization") != "kimi" {
@@ -111,5 +133,7 @@ func main() {
 		})
 		pprof.RouteRegister(adminGroup, "pprof")
 	}
+
 	log.Fatal(http.ListenAndServe(port, r))
+
 }
