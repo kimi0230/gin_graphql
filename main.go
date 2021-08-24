@@ -65,6 +65,21 @@ func newRotateHook(logPath string, logFileName string, maxAge time.Duration, rot
 	return lfsHook
 }
 
+func PlaygroundHandler(path string) gin.HandlerFunc {
+	h := playground.Handler("GraphQL playground", path)
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
+}
+
+func GraphqlHandler() gin.HandlerFunc {
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+
+	return func(c *gin.Context) {
+		srv.ServeHTTP(c.Writer, c.Request)
+	}
+}
+
 func main() {
 	// defer db.GormDB.Close()
 	// defer db.SqlDB.Close()
@@ -102,6 +117,7 @@ func main() {
 		graphQLPath = "/query"
 	}
 
+	/* 另開 port 的 graphql
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", graphQLPath))
@@ -111,12 +127,18 @@ func main() {
 		log.Printf("connect to http://localhost:%s/%s for GraphQL playground", graphQLPort, graphQLPath)
 		log.Fatal(http.ListenAndServe(":"+graphQLPort, nil))
 	}()
+	*/
+
 	// GraphQL Server <<<
 
 	// GIN binding validation version
 	customValidateV9.Start()
 
 	r := routes.SetupRouter()
+
+	// gin 的 router 結合 graphql
+	r.GET("/", PlaygroundHandler(graphQLPath))
+	r.POST(graphQLPath, GraphqlHandler())
 
 	// Listen and Server
 	port := os.Getenv("APP_URL")

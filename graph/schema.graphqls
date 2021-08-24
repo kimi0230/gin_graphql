@@ -1,28 +1,41 @@
 # GraphQL schema example
 #
 # https://gqlgen.com/getting-started/
-
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
-}
+scalar Time
 
 type User {
   id: ID!
+  username: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  meetups: [Meetup!]!
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+type Meetup {
+  id: ID!
   name: String!
+  description: String!
+  user: User!
+}
+
+input NewMeetup {
+  name: String!
+  description: String!
+}
+
+input MeetupFilter {
+  name: String
 }
 
 type Query {
-  todos: [Todo!]!
+  meetups(filter: MeetupFilter, limit: Int = 10, offset: Int = 0): [Meetup!]!
+  user(id: ID!): User!
 }
 
-input NewTodo {
-  text: String!
-  userId: String!
-}
 
 type Mutation {
-  createTodo(input: NewTodo!): Todo!
+  createMeetup(input: NewMeetup!): Meetup!
 }
