@@ -9,6 +9,11 @@ go mod tidy
 
 ## API Rules
 
+## Build Server
+```
+make build
+```
+
 ## GraphQL gqlgen
 You could initialize a new project using the recommended folder structure by running this command
 
@@ -38,6 +43,12 @@ At the top of our resolver.go, between package and import, add the following lin
 ```
 This magic comment tells go generate what command to run when we want to regenerate our code. 
 To run go generate recursively over your entire project, use this command:`go generate ./...`
+
+
+### Modify schema
+1. modify your schema `graph/schema.graphqls`
+2. `./script/gqlgen.sh`
+3. modify `graph/resolver.go`
 
 ---
 ## Fix
