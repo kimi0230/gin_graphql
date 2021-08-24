@@ -6,8 +6,8 @@ package graph
 import (
 	"context"
 	"fmt"
-	"gin_restful_graphql/graph/generated"
-	"gin_restful_graphql/graph/model"
+	"gin_graphql/graph/generated"
+	"gin_graphql/graph/model"
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {

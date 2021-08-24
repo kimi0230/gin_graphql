@@ -1,8 +1,8 @@
 package main
 
 import (
-	"gin_restful_graphql/graph"
-	"gin_restful_graphql/graph/generated"
+	"gin_graphql/graph"
+	"gin_graphql/graph/generated"
 	"log"
 	"net/http"
 	"os"

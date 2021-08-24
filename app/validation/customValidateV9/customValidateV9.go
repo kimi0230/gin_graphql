@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"sync"
 
-	"gin_restful_graphql/app/validation/validatefunctionV9"
+	"gin_graphql/app/validation/validatefunctionV9"
 
 	"github.com/gin-gonic/gin/binding"
 	"gopkg.in/go-playground/validator.v9"

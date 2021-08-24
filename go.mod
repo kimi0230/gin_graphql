@@ -1,4 +1,4 @@
-module gin_restful_graphql
+module gin_graphql
 
 go 1.16
 

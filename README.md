@@ -1,4 +1,4 @@
-# Gin RESTful GraphQL
+# Gin GraphQL
 
 
 ## Initiation

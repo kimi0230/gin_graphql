@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"gin_restful_graphql/app/models"
-	db "gin_restful_graphql/config/databases/mysql"
+	"gin_graphql/app/models"
+	db "gin_graphql/config/databases/mysql"
 )
 
 var (

@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"gin_restful_graphql/app/controllers/GuideController"
-	"gin_restful_graphql/app/middleware/headerAuth"
-	"gin_restful_graphql/app/middleware/rateLimit"
+	"gin_graphql/app/controllers/GuideController"
+	"gin_graphql/app/middleware/headerAuth"
+	"gin_graphql/app/middleware/rateLimit"
 
 	"net/http"
 	"os"

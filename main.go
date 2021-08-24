@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"gin_restful_graphql/app/validation/customValidateV9"
-	"gin_restful_graphql/routes"
+	"gin_graphql/app/validation/customValidateV9"
+	"gin_graphql/routes"
 	"os"
 
 	"github.com/gin-contrib/pprof"

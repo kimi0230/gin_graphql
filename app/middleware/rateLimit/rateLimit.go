@@ -1,8 +1,8 @@
 package rateLimit
 
 import (
-	ginServices "gin_restful_graphql/app/services/ginService"
-	"gin_restful_graphql/config/errorCode"
+	ginServices "gin_graphql/app/services/ginService"
+	"gin_graphql/config/errorCode"
 
 	"github.com/didip/tollbooth"
 	"github.com/gin-gonic/gin"

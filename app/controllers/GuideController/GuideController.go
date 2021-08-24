@@ -2,8 +2,8 @@ package GuideController
 
 import (
 	"fmt"
-	ginServices "gin_restful_graphql/app/services/ginService"
-	"gin_restful_graphql/config/errorCode"
+	ginServices "gin_graphql/app/services/ginService"
+	"gin_graphql/config/errorCode"
 
 	"github.com/gin-gonic/gin"
 )

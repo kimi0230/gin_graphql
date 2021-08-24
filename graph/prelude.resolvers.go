@@ -6,7 +6,7 @@ package graph
 import (
 	"context"
 	"fmt"
-	"gin_restful_graphql/graph/generated"
+	"gin_graphql/graph/generated"
 
 	"github.com/99designs/gqlgen/graphql/introspection"
 )
