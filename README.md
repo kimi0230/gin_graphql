@@ -12,6 +12,7 @@ go mod tidy
 ## GraphQL gqlgen
 You could initialize a new project using the recommended folder structure by running this command
 
+### Initiation
 ```shell
 go run github.com/99designs/gqlgen init
 ```
@@ -30,6 +31,13 @@ go run github.com/99designs/gqlgen init
 │   └── schema.resolvers.go  - the resolver implementation for schema.graphql
 └── server.go                - The entry point to your app. Customize it however you see fit
 `
+### Finishing touches
+At the top of our resolver.go, between package and import, add the following line:
+``` go
+//go:generate go run github.com/99designs/gqlgen
+```
+This magic comment tells go generate what command to run when we want to regenerate our code. 
+To run go generate recursively over your entire project, use this command:`go generate ./...`
 
 ---
 ## Fix

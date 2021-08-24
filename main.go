@@ -92,21 +92,26 @@ func main() {
 		godotenv.Load("./.env.dev")
 	}
 
-	// GraphQL Server
+	// GraphQL Server >>>
 	graphQLPort := os.Getenv("GRAPHQL_PORT")
 	if graphQLPort == "" {
 		graphQLPort = defaultGraphQLPort
 	}
+	graphQLPath := os.Getenv("GRAPHQL_PATH")
+	if graphQLPath == "" {
+		graphQLPath = "/query"
+	}
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
 
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
+	http.Handle("/", playground.Handler("GraphQL playground", graphQLPath))
+	http.Handle(graphQLPath, srv)
 
 	go func() {
-		log.Printf("connect to http://localhost:%s/ for GraphQL playground", graphQLPort)
+		log.Printf("connect to http://localhost:%s/%s for GraphQL playground", graphQLPort, graphQLPath)
 		log.Fatal(http.ListenAndServe(":"+graphQLPort, nil))
 	}()
+	// GraphQL Server <<<
 
 	// GIN binding validation version
 	customValidateV9.Start()
