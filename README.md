@@ -16,6 +16,7 @@ You could initialize a new project using the recommended folder structure by run
 go run github.com/99designs/gqlgen init
 ```
 
+---
 ## Fix
 1. `graph/prelude.resolvers.go:19:34: cannot refer to unexported name generated.__DirectiveResolver`
     * rollback the version of gqlparser from github.com/vektah/gqlparser/v2 v2.2.0 to github.com/vektah/gqlparser/v2 v2.1.0
