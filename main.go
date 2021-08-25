@@ -137,8 +137,8 @@ func main() {
 	r := routes.SetupRouter()
 
 	// gin 的 router 結合 graphql
-	r.GET("/", PlaygroundHandler(graphQLPath))
-	r.POST(graphQLPath, GraphqlHandler())
+	r.GET("/graphql", PlaygroundHandler(graphQLPath))
+	r.POST("/graphql"+graphQLPath, GraphqlHandler())
 
 	// Listen and Server
 	port := os.Getenv("APP_URL")
