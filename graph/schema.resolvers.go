@@ -44,7 +44,13 @@ func (r *queryResolver) User(ctx context.Context, id string) (*models.User, erro
 }
 
 func (r *userResolver) Meetups(ctx context.Context, obj *models.User) ([]*models.Meetup, error) {
-	panic(fmt.Errorf("not implemented"))
+	var m []*models.Meetup
+	for _, meetup := range meetups {
+		if meetup.UserID == obj.ID {
+			m = append(m, meetup)
+		}
+	}
+	return m, nil
 }
 
 func (r *userResolver) CreatedAt(ctx context.Context, obj *models.User) (*time.Time, error) {
