@@ -47,8 +47,8 @@ To run go generate recursively over your entire project, use this command:`go ge
 
 ### Modify schema
 1. modify your schema `graph/schema.graphqls`
-2. `./script/gqlgen.sh`
-3. modify `graph/resolver.go`
+2. run gqlgen `./script/gqlgen.sh`
+3. modify resolvers `graph/resolver.go`
 
 ---
 ## Fix

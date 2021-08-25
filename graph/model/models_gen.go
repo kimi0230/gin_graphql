@@ -2,17 +2,6 @@
 
 package model
 
-import (
-	"time"
-)
-
-type Meetup struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	User        *User  `json:"user"`
-}
-
 type MeetupFilter struct {
 	Name *string `json:"name"`
 }
@@ -20,15 +9,4 @@ type MeetupFilter struct {
 type NewMeetup struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
-}
-
-type User struct {
-	ID        string    `json:"id"`
-	Username  string    `json:"username"`
-	Email     string    `json:"email"`
-	FirstName string    `json:"firstName"`
-	LastName  string    `json:"lastName"`
-	Meetups   []*Meetup `json:"meetups"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
 }
