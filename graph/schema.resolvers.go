@@ -78,9 +78,9 @@ type userResolver struct{ *Resolver }
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
 var meetups = []*models.Meetup{
 	{
-		BaseModel:   models.BaseModel{ID: 1},
+		BaseModel:   models.BaseModel{ID: 3},
 		Name:        "a meetup-2",
-		Description: "one",
+		Description: "two",
 		UserID:      1,
 	},
 	{
