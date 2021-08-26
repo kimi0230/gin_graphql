@@ -5,10 +5,8 @@ scalar Time
 
 type User {
   id: ID!
-  username: String!
+  account: String!
   email: String!
-  firstName: String!
-  lastName: String!
   meetups: [Meetup!]!
   createdAt: Time!
   updatedAt: Time!

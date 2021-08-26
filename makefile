@@ -10,7 +10,7 @@ clean:
 	rm -rf build/${bin_file}
 
 migrate:
-	go run database/migrate.go -m=auto ${mode}
+	go run database/migrate.go -m=${mode}
 
 build_graphql:
 	./script/gqlgen.sh

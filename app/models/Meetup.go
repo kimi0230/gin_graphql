@@ -1,9 +1,5 @@
 package models
 
-import (
-	"fmt"
-)
-
 type Meetup struct {
 	BaseModel
 	Name        string `json:"name" form:"name,omitempty" structs:"name,omitempty" gorm:"Column:name;type:varchar(32);comment:'name' "`
@@ -15,12 +11,10 @@ func (Meetup) TableName() string {
 	return "meetup"
 }
 
-func (m *Meetup) GetMeetup() ([]*Meetup, error) {
-	fmt.Println("-------dddddddddddddddddd->")
+func (m *Meetup) Get() ([]*Meetup, error) {
 	var meetups []*Meetup
 	if err := db.Model(meetups).Find(&meetups).Error; err != nil {
 		return nil, err
 	}
-	fmt.Println("--------->", meetups)
 	return meetups, nil
 }

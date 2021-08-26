@@ -2,10 +2,19 @@ package models
 
 type User struct {
 	BaseModel
-	Username  string    `json:"username"`
-	Email     string    `json:"email"`
-	Password  string    `json:"password"`
-	FirstName string    `json:"firstName"`
-	LastName  string    `json:"lastName"`
-	Meetups   []*Meetup `json:"meetups"`
+	Account  string `json:"account"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+func (User) TableName() string {
+	return "users"
+}
+
+func (u *User) Get() (*User, error) {
+	users := &User{}
+	if err := db.Model(users).First(&users).Error; err != nil {
+		return users, err
+	}
+	return users, nil
 }
