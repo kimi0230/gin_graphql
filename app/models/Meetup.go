@@ -1,8 +1,26 @@
 package models
 
+import (
+	"fmt"
+)
+
 type Meetup struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	UserID      string `json:"userId"`
+	BaseModel
+	Name        string `json:"name" form:"name,omitempty" structs:"name,omitempty" gorm:"Column:name;type:varchar(32);comment:'name' "`
+	Description string `json:"description" form:"description,omitempty" structs:"description,omitempty" gorm:"Column:description;type:varchar(255);comment:'description' "`
+	UserID      int    `json:"userId" form:"userId,omitempty" structs:"userId,omitempty"`
+}
+
+func (Meetup) TableName() string {
+	return "meetup"
+}
+
+func (m *Meetup) GetMeetup() ([]*Meetup, error) {
+	fmt.Println("-------dddddddddddddddddd->")
+	var meetups []*Meetup
+	if err := db.Model(meetups).Find(&meetups).Error; err != nil {
+		return nil, err
+	}
+	fmt.Println("--------->", meetups)
+	return meetups, nil
 }

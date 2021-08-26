@@ -35,8 +35,8 @@ func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeet
 }
 
 func (r *queryResolver) Meetups(ctx context.Context, filter *model.MeetupFilter, limit *int, offset *int) ([]*models.Meetup, error) {
-	// panic(fmt.Errorf("not implemented"))
-	return meetups, nil
+	var meetups models.Meetup
+	return meetups.GetMeetup()
 }
 
 func (r *queryResolver) User(ctx context.Context, id string) (*models.User, error) {
@@ -51,14 +51,6 @@ func (r *userResolver) Meetups(ctx context.Context, obj *models.User) ([]*models
 		}
 	}
 	return m, nil
-}
-
-func (r *userResolver) CreatedAt(ctx context.Context, obj *models.User) (*time.Time, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *userResolver) UpdatedAt(ctx context.Context, obj *models.User) (*time.Time, error) {
-	panic(fmt.Errorf("not implemented"))
 }
 
 // Meetup returns generated.MeetupResolver implementation.
@@ -84,27 +76,34 @@ type userResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *userResolver) CreatedAt(ctx context.Context, obj *models.User) (*time.Time, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+func (r *userResolver) UpdatedAt(ctx context.Context, obj *models.User) (*time.Time, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 var meetups = []*models.Meetup{
 	{
-		ID:          "1",
+		BaseModel:   models.BaseModel{ID: 1},
 		Name:        "a meetup",
 		Description: "one",
-		UserID:      "1",
+		UserID:      1,
 	},
 	{
-		ID:          "2",
+		BaseModel:   models.BaseModel{ID: 2},
 		Name:        "second meetup",
 		Description: "two",
-		UserID:      "2",
+		UserID:      2,
 	},
 }
 var users = []*models.User{
 	{
-		ID:       "1",
-		Username: "kimi",
+		BaseModel: models.BaseModel{ID: 1},
+		Username:  "kimi",
 	},
 	{
-		ID:       "2",
-		Username: "Imik",
+		BaseModel: models.BaseModel{ID: 2},
+		Username:  "Imik",
 	},
 }

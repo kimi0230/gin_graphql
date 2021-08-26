@@ -1,12 +1,16 @@
 all: build
 
 bin_file=gin_graphql
+mode=auto
 
 build: clean
 	./script/gobuild.sh
 
 clean:
 	rm -rf build/${bin_file}
+
+migrate:
+	go run database/migrate.go -m=auto ${mode}
 
 build_graphql:
 	./script/gqlgen.sh
