@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"gin_graphql/app/models"
-	db "gin_graphql/config/databases/mysql"
+	db "gin_graphql/config/mysql"
 )
 
 var (
@@ -13,7 +13,8 @@ var (
 )
 
 var tables []interface{} = []interface{}{
-	models.Guide{},
+	models.User{},
+	models.Meetup{},
 }
 
 func init() {

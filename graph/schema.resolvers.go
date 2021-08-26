@@ -10,7 +10,6 @@ import (
 	"gin_graphql/app/models"
 	"gin_graphql/graph/generated"
 	"gin_graphql/graph/model"
-	"time"
 )
 
 func (r *meetupResolver) User(ctx context.Context, obj *models.Meetup) (*models.User, error) {
@@ -35,12 +34,13 @@ func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeet
 }
 
 func (r *queryResolver) Meetups(ctx context.Context, filter *model.MeetupFilter, limit *int, offset *int) ([]*models.Meetup, error) {
-	// panic(fmt.Errorf("not implemented"))
-	return meetups, nil
+	var meetups models.Meetup
+	return meetups.Get()
 }
 
 func (r *queryResolver) User(ctx context.Context, id string) (*models.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	var users models.User
+	return users.Get()
 }
 
 func (r *userResolver) Meetups(ctx context.Context, obj *models.User) ([]*models.Meetup, error) {
@@ -51,14 +51,6 @@ func (r *userResolver) Meetups(ctx context.Context, obj *models.User) ([]*models
 		}
 	}
 	return m, nil
-}
-
-func (r *userResolver) CreatedAt(ctx context.Context, obj *models.User) (*time.Time, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *userResolver) UpdatedAt(ctx context.Context, obj *models.User) (*time.Time, error) {
-	panic(fmt.Errorf("not implemented"))
 }
 
 // Meetup returns generated.MeetupResolver implementation.
@@ -86,25 +78,31 @@ type userResolver struct{ *Resolver }
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
 var meetups = []*models.Meetup{
 	{
-		ID:          "1",
-		Name:        "a meetup",
-		Description: "one",
-		UserID:      "1",
+		BaseModel:   models.BaseModel{ID: 3},
+		Name:        "a meetup-2",
+		Description: "two",
+		UserID:      1,
 	},
 	{
-		ID:          "2",
+		BaseModel:   models.BaseModel{ID: 1},
+		Name:        "a meetup -1",
+		Description: "one",
+		UserID:      1,
+	},
+	{
+		BaseModel:   models.BaseModel{ID: 2},
 		Name:        "second meetup",
 		Description: "two",
-		UserID:      "2",
+		UserID:      2,
 	},
 }
 var users = []*models.User{
 	{
-		ID:       "1",
-		Username: "kimi",
+		BaseModel: models.BaseModel{ID: 1},
+		Account:   "kimi",
 	},
 	{
-		ID:       "2",
-		Username: "Imik",
+		BaseModel: models.BaseModel{ID: 2},
+		Account:   "Imik",
 	},
 }
