@@ -20,8 +20,8 @@ type IBaseModel interface {
 
 type BaseModel struct {
 	ID        int        `json:"id" form:"id,omitempty" structs:"id,omitempty"`
-	CreatedAt time.Time  `gorm:"index;not null;default:CURRENT_TIMESTAMP"`
-	UpdatedAt *time.Time `gorm:"index"`
+	CreatedAt time.Time  `gorm:"not null;default:CURRENT_TIMESTAMP"`
+	UpdatedAt *time.Time `gorm:""`
 }
 
 func (b *BaseModel) Get() (interface{}, error) {

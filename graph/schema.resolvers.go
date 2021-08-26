@@ -5,7 +5,6 @@ package graph
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"gin_graphql/app/models"
 	"gin_graphql/graph/generated"
@@ -13,20 +12,8 @@ import (
 )
 
 func (r *meetupResolver) User(ctx context.Context, obj *models.Meetup) (*models.User, error) {
-	// panic(fmt.Errorf("not implemented"))
-	// meetup 關聯 user
-	user := new(models.User)
-
-	for _, u := range users {
-		if u.ID == obj.UserID {
-			user = u
-			break
-		}
-	}
-	if user == nil {
-		return nil, errors.New("user wit id not exist")
-	}
-	return user, nil
+	var user models.User
+	return user.GetUserByID(obj.UserID)
 }
 
 func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeetup) (*models.Meetup, error) {
@@ -44,13 +31,14 @@ func (r *queryResolver) User(ctx context.Context, id string) (*models.User, erro
 }
 
 func (r *userResolver) Meetups(ctx context.Context, obj *models.User) ([]*models.Meetup, error) {
-	var m []*models.Meetup
-	for _, meetup := range meetups {
-		if meetup.UserID == obj.ID {
-			m = append(m, meetup)
-		}
-	}
-	return m, nil
+	// var m []*models.Meetup
+	// for _, meetup := range meetups {
+	// 	if meetup.UserID == obj.ID {
+	// 		m = append(m, meetup)
+	// 	}
+	// }
+	var meetups models.Meetup
+	return meetups.GetMeetupsByUser(obj)
 }
 
 // Meetup returns generated.MeetupResolver implementation.
@@ -69,40 +57,3 @@ type meetupResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-var meetups = []*models.Meetup{
-	{
-		BaseModel:   models.BaseModel{ID: 3},
-		Name:        "a meetup-2",
-		Description: "two",
-		UserID:      1,
-	},
-	{
-		BaseModel:   models.BaseModel{ID: 1},
-		Name:        "a meetup -1",
-		Description: "one",
-		UserID:      1,
-	},
-	{
-		BaseModel:   models.BaseModel{ID: 2},
-		Name:        "second meetup",
-		Description: "two",
-		UserID:      2,
-	},
-}
-var users = []*models.User{
-	{
-		BaseModel: models.BaseModel{ID: 1},
-		Account:   "kimi",
-	},
-	{
-		BaseModel: models.BaseModel{ID: 2},
-		Account:   "Imik",
-	},
-}

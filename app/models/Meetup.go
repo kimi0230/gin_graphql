@@ -18,3 +18,11 @@ func (m *Meetup) Get() ([]*Meetup, error) {
 	}
 	return meetups, nil
 }
+
+func (m *Meetup) GetMeetupsByUser(user *User) ([]*Meetup, error) {
+	var meetups []*Meetup
+	if err := db.Model(&meetups).Where("user_id = ?", user.ID).Find(&meetups).Order("id").Error; err != nil {
+		return nil, err
+	}
+	return meetups, nil
+}
