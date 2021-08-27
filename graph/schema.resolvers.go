@@ -5,7 +5,7 @@ package graph
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"gin_graphql/app/models"
 	"gin_graphql/graph/generated"
 	"gin_graphql/graph/model"
@@ -17,7 +17,18 @@ func (r *meetupResolver) User(ctx context.Context, obj *models.Meetup) (*models.
 }
 
 func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeetup) (*models.Meetup, error) {
-	panic(fmt.Errorf("not implemented"))
+	if len(input.Name) < 3 {
+		return nil, errors.New("Name not long enough")
+	}
+	if len(input.Description) < 3 {
+		return nil, errors.New("Description not long enough")
+	}
+	meetup := &models.Meetup{
+		Name:        input.Name,
+		Description: input.Description,
+		UserID:      1,
+	}
+	return meetup.Create(meetup)
 }
 
 func (r *queryResolver) Meetups(ctx context.Context, filter *model.MeetupFilter, limit *int, offset *int) ([]*models.Meetup, error) {
@@ -31,12 +42,6 @@ func (r *queryResolver) User(ctx context.Context, id string) (*models.User, erro
 }
 
 func (r *userResolver) Meetups(ctx context.Context, obj *models.User) ([]*models.Meetup, error) {
-	// var m []*models.Meetup
-	// for _, meetup := range meetups {
-	// 	if meetup.UserID == obj.ID {
-	// 		m = append(m, meetup)
-	// 	}
-	// }
 	var meetups models.Meetup
 	return meetups.GetMeetupsByUser(obj)
 }
