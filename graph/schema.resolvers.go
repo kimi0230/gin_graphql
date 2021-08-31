@@ -48,6 +48,15 @@ func (r *mutationResolver) UpdateMeetup(ctx context.Context, id string, input mo
 	return meetup.Update(idInt, inputObj)
 }
 
+func (r *mutationResolver) DeleteMeetUp(ctx context.Context, id string) (bool, error) {
+	var meetups models.Meetup
+	idInt, err := strconv.Atoi(id)
+	if err != nil {
+		return false, err
+	}
+	return meetups.Delete(idInt)
+}
+
 func (r *queryResolver) Meetups(ctx context.Context, filter *model.MeetupFilter, limit *int, offset *int) ([]*models.Meetup, error) {
 	var meetups models.Meetup
 	return meetups.Get()

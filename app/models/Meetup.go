@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 type Meetup struct {
 	BaseModel
 	Name        string `json:"name" form:"name,omitempty" structs:"name,omitempty" gorm:"Column:name;type:varchar(32);comment:'name' "`
@@ -35,6 +37,17 @@ func (m *Meetup) Update(id int, input interface{}) (*Meetup, error) {
 	}
 	tx.Commit()
 	return m, nil
+}
+
+func (m *Meetup) Delete(id int) (bool, error) {
+	tx := db.Begin()
+	fmt.Println("--->", id)
+	if err := tx.Where("id = ?", id).Delete(m).Error; err != nil {
+		tx.Rollback()
+		return false, err
+	}
+	tx.Commit()
+	return true, nil
 }
 
 func (m *Meetup) GetMeetupsByUser(user *User) ([]*Meetup, error) {
