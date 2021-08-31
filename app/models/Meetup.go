@@ -26,6 +26,17 @@ func (m *Meetup) Create(meetup *Meetup) (*Meetup, error) {
 	return meetup, nil
 }
 
+func (m *Meetup) Update(id int, input interface{}) (*Meetup, error) {
+	tx := db.Begin()
+	query := tx.Model(m).Where("id = ?", id).Updates(input)
+	if query.Error != nil {
+		tx.Rollback()
+		return nil, query.Error
+	}
+	tx.Commit()
+	return m, nil
+}
+
 func (m *Meetup) GetMeetupsByUser(user *User) ([]*Meetup, error) {
 	var meetups []*Meetup
 	if err := db.Model(&meetups).Where("user_id = ?", user.ID).Find(&meetups).Order("id").Error; err != nil {

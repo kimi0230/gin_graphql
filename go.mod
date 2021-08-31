@@ -7,6 +7,7 @@ require (
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/didip/tollbooth v4.0.2+incompatible
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
+	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-sql-driver/mysql v1.6.0
