@@ -9,6 +9,7 @@ import (
 	"gin_graphql/app/models"
 	"gin_graphql/graph/generated"
 	"gin_graphql/graph/model"
+	"strconv"
 )
 
 func (r *meetupResolver) User(ctx context.Context, obj *models.Meetup) (*models.User, error) {
@@ -29,6 +30,22 @@ func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeet
 		UserID:      1,
 	}
 	return meetup.Create(meetup)
+}
+
+func (r *mutationResolver) UpdateMeetup(ctx context.Context, id string, input model.UpdateMeetup) (*models.Meetup, error) {
+	// fmt.Println("kkikimimimi")
+	var meetup models.Meetup
+	idInt, err := strconv.Atoi(id)
+	if err != nil {
+		return nil, err
+	}
+
+	inputObj := map[string]interface{}{
+		"name":        *input.Name,
+		"description": *input.Description,
+	}
+
+	return meetup.Update(idInt, inputObj)
 }
 
 func (r *queryResolver) Meetups(ctx context.Context, filter *model.MeetupFilter, limit *int, offset *int) ([]*models.Meetup, error) {

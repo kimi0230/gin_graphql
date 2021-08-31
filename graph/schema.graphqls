@@ -24,6 +24,11 @@ input NewMeetup {
   description: String!
 }
 
+input UpdateMeetup {
+  name: String
+  description: String
+}
+
 input MeetupFilter {
   name: String
 }
@@ -36,4 +41,5 @@ type Query {
 
 type Mutation {
   createMeetup(input: NewMeetup!): Meetup!
+  updateMeetup(id: ID!, input: UpdateMeetup!): Meetup!
 }
