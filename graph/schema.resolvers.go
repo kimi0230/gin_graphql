@@ -59,7 +59,7 @@ func (r *mutationResolver) DeleteMeetUp(ctx context.Context, id string) (bool, e
 
 func (r *queryResolver) Meetups(ctx context.Context, filter *model.MeetupFilter, limit *int, offset *int) ([]*models.Meetup, error) {
 	var meetups models.Meetup
-	return meetups.Get()
+	return meetups.Get(filter, limit, offset)
 }
 
 func (r *queryResolver) User(ctx context.Context, id string) (*models.User, error) {
