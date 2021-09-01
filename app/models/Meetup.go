@@ -1,5 +1,10 @@
 package models
 
+import (
+	"fmt"
+	"gin_graphql/graph/model"
+)
+
 type Meetup struct {
 	BaseModel
 	Name        string `json:"name" form:"name,omitempty" structs:"name,omitempty" gorm:"Column:name;type:varchar(32);comment:'name' "`
@@ -11,11 +16,27 @@ func (Meetup) TableName() string {
 	return "meetup"
 }
 
-func (m *Meetup) Get() ([]*Meetup, error) {
+func (m *Meetup) Get(filter *model.MeetupFilter, limit, offset *int) ([]*Meetup, error) {
 	var meetups []*Meetup
-	if err := db.Model(meetups).Find(&meetups).Error; err != nil {
+	query := db.Model(&meetups).Order("id DESC")
+	if filter != nil {
+		if filter.Name != nil && *filter.Name != "" {
+			query = query.Where("name LIKE ?", fmt.Sprintf("%%%s%%", *filter.Name))
+		}
+	}
+
+	if limit != nil {
+		query = query.Limit(*limit)
+	}
+
+	if offset != nil {
+		query = query.Offset(*offset)
+	}
+
+	if err := query.Find(&meetups).Error; err != nil {
 		return nil, err
 	}
+
 	return meetups, nil
 }
 
@@ -35,6 +56,17 @@ func (m *Meetup) Update(id int, input interface{}) (*Meetup, error) {
 	}
 	tx.Commit()
 	return m, nil
+}
+
+func (m *Meetup) Delete(id int) (bool, error) {
+	tx := db.Begin()
+	fmt.Println("--->", id)
+	if err := tx.Where("id = ?", id).Delete(m).Error; err != nil {
+		tx.Rollback()
+		return false, err
+	}
+	tx.Commit()
+	return true, nil
 }
 
 func (m *Meetup) GetMeetupsByUser(user *User) ([]*Meetup, error) {
