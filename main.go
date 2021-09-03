@@ -19,6 +19,8 @@ import (
 	"github.com/rifflock/lfshook"
 	log "github.com/sirupsen/logrus"
 
+	glmiddleware "gin_graphql/graph/middleware"
+
 	"github.com/joho/godotenv"
 	_ "github.com/joho/godotenv"
 )
@@ -138,7 +140,7 @@ func main() {
 
 	// gin 的 router 結合 graphql
 	r.GET("/graphql", PlaygroundHandler(graphQLPath))
-	r.POST("/graphql"+graphQLPath, GraphqlHandler())
+	r.POST("/graphql"+graphQLPath, glmiddleware.AuthMiddleware(), GraphqlHandler())
 
 	// Listen and Server
 	port := os.Getenv("APP_URL")
