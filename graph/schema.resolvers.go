@@ -6,6 +6,7 @@ package graph
 import (
 	"context"
 	"errors"
+	"fmt"
 	"gin_graphql/app/models"
 	"gin_graphql/graph/generated"
 	"gin_graphql/graph/model"
@@ -15,6 +16,10 @@ import (
 func (r *meetupResolver) User(ctx context.Context, obj *models.Meetup) (*models.User, error) {
 	var user models.User
 	return user.GetUserByID(obj.UserID)
+}
+
+func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInput) (*model.AuthResponse, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeetup) (*models.Meetup, error) {
