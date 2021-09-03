@@ -2,14 +2,33 @@ package middleware
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
+type HeaderValid struct {
+	Authorization string `json:"authorization" form:"authorization"  binding:"required"`
+}
+
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("kkk")
-		// c.Abort()
+		var reqJSON HeaderValid
+		// 檢查 Header
+		if bindErr := c.ShouldBindHeader(&reqJSON); bindErr != nil {
+			c.Abort()
+			return
+		}
+
+		headerAuth := strings.Split(reqJSON.Authorization, " ")
+		if headerAuth[0] != "Bearer" {
+			c.Abort()
+			return
+		}
+		token := headerAuth[1]
+		fmt.Println("token ", token)
+		// TODO: 檢查token
+
 		c.Next()
 	}
 }
