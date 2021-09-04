@@ -49,6 +49,7 @@ type DirectiveRoot struct {
 type ComplexityRoot struct {
 	AuthResponse struct {
 		AuthToken func(childComplexity int) int
+		User      func(childComplexity int) int
 	}
 
 	AuthToken struct {
@@ -123,6 +124,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.AuthResponse.AuthToken(childComplexity), true
+
+	case "AuthResponse.user":
+		if e.complexity.AuthResponse.User == nil {
+			break
+		}
+
+		return e.complexity.AuthResponse.User(childComplexity), true
 
 	case "AuthToken.accessToken":
 		if e.complexity.AuthToken.AccessToken == nil {
@@ -372,8 +380,8 @@ type AuthToken {
 
 type AuthResponse {
   authToken: AuthToken!
+  user: User!
 }
-
 
 input NewMeetup {
   name: String!
@@ -403,13 +411,13 @@ type Query {
   user(id: ID!): User!
 }
 
-
 type Mutation {
   register(input: RegisterInput!): AuthResponse!
   createMeetup(input: NewMeetup!): Meetup!
   updateMeetup(id: ID!, input: UpdateMeetup!): Meetup!
-  deleteMeetUp(id: ID!):Boolean!
-}`, BuiltIn: false},
+  deleteMeetUp(id: ID!): Boolean!
+}
+`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -620,6 +628,41 @@ func (ec *executionContext) _AuthResponse_authToken(ctx context.Context, field g
 	res := resTmp.(*model.AuthToken)
 	fc.Result = res
 	return ec.marshalNAuthToken2ᚖgin_graphqlᚋgraphᚋmodelᚐAuthToken(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _AuthResponse_user(ctx context.Context, field graphql.CollectedField, obj *model.AuthResponse) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "AuthResponse",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.User, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.User)
+	fc.Result = res
+	return ec.marshalNUser2ᚖgin_graphqlᚋappᚋmodelsᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _AuthToken_accessToken(ctx context.Context, field graphql.CollectedField, obj *model.AuthToken) (ret graphql.Marshaler) {
@@ -2609,6 +2652,11 @@ func (ec *executionContext) _AuthResponse(ctx context.Context, sel ast.Selection
 			out.Values[i] = graphql.MarshalString("AuthResponse")
 		case "authToken":
 			out.Values[i] = ec._AuthResponse_authToken(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "user":
+			out.Values[i] = ec._AuthResponse_user(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

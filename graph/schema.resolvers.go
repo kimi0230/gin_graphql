@@ -24,10 +24,10 @@ func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInp
 
 func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeetup) (*models.Meetup, error) {
 	if len(input.Name) < 3 {
-		return nil, errors.New("Name not long enough")
+		return nil, errors.New("name not long enough")
 	}
 	if len(input.Description) < 3 {
-		return nil, errors.New("Description not long enough")
+		return nil, errors.New("description not long enough")
 	}
 	meetup := &models.Meetup{
 		Name:        input.Name,
@@ -63,8 +63,7 @@ func (r *mutationResolver) DeleteMeetUp(ctx context.Context, id string) (bool, e
 }
 
 func (r *queryResolver) Meetups(ctx context.Context, filter *model.MeetupFilter, limit *int, offset *int) ([]*models.Meetup, error) {
-	var meetups models.Meetup
-	return meetups.Get(filter, limit, offset)
+	return model.GetMeetups(filter, limit, offset)
 }
 
 func (r *queryResolver) User(ctx context.Context, id string) (*models.User, error) {

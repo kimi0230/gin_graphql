@@ -3,11 +3,13 @@
 package model
 
 import (
+	"gin_graphql/app/models"
 	"time"
 )
 
 type AuthResponse struct {
-	AuthToken *AuthToken `json:"authToken"`
+	AuthToken *AuthToken   `json:"authToken"`
+	User      *models.User `json:"user"`
 }
 
 type AuthToken struct {

@@ -2,6 +2,8 @@ package middleware
 
 import (
 	"fmt"
+	ginServices "gin_graphql/app/services/ginService"
+	"gin_graphql/config/errorCode"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -22,6 +24,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		headerAuth := strings.Split(reqJSON.Authorization, " ")
 		if headerAuth[0] != "Bearer" {
+			ginServices.GinRespone(c, "", "", errorCode.FORBIDDEN, nil)
 			c.Abort()
 			return
 		}

@@ -26,8 +26,8 @@ type AuthToken {
 
 type AuthResponse {
   authToken: AuthToken!
+  user: User!
 }
-
 
 input NewMeetup {
   name: String!
@@ -57,10 +57,9 @@ type Query {
   user(id: ID!): User!
 }
 
-
 type Mutation {
   register(input: RegisterInput!): AuthResponse!
   createMeetup(input: NewMeetup!): Meetup!
   updateMeetup(id: ID!, input: UpdateMeetup!): Meetup!
-  deleteMeetUp(id: ID!):Boolean!
+  deleteMeetUp(id: ID!): Boolean!
 }

@@ -15,7 +15,7 @@ func (User) TableName() string {
 
 func (u *User) GetUserByField(field, value string) (*User, error) {
 	var user *User
-	if err := db.Model(user).Where(fmt.Sprintf("%v = ?", field), value).First(user).Error; err != nil {
+	if err := DB.Model(user).Where(fmt.Sprintf("%v = ?", field), value).First(user).Error; err != nil {
 		return user, err
 	}
 	return user, nil
@@ -23,7 +23,7 @@ func (u *User) GetUserByField(field, value string) (*User, error) {
 
 func (u *User) GetUserByID(id int) (*User, error) {
 	user := &User{}
-	if err := db.Model(user).Where("id = ?", id).First(user).Error; err != nil {
+	if err := DB.Model(user).Where("id = ?", id).First(user).Error; err != nil {
 		fmt.Println("kkkkk")
 		return user, err
 	}
@@ -32,7 +32,7 @@ func (u *User) GetUserByID(id int) (*User, error) {
 
 func (u *User) Get() (*User, error) {
 	users := &User{}
-	if err := db.Model(users).First(&users).Error; err != nil {
+	if err := DB.Model(users).First(&users).Error; err != nil {
 		return users, err
 	}
 	return users, nil
