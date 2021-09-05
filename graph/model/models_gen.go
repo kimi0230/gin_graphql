@@ -2,6 +2,21 @@
 
 package model
 
+import (
+	"gin_graphql/app/models"
+	"time"
+)
+
+type AuthResponse struct {
+	AuthToken *AuthToken   `json:"authToken"`
+	User      *models.User `json:"user"`
+}
+
+type AuthToken struct {
+	AccessToken string    `json:"accessToken"`
+	ExpiredAt   time.Time `json:"expiredAt"`
+}
+
 type MeetupFilter struct {
 	Name *string `json:"name"`
 }
@@ -9,6 +24,13 @@ type MeetupFilter struct {
 type NewMeetup struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
+}
+
+type RegisterInput struct {
+	Account         string `json:"account"`
+	Email           string `json:"email"`
+	Password        string `json:"password"`
+	ConfirmPassword string `json:"confirmPassword"`
 }
 
 type UpdateMeetup struct {

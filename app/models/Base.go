@@ -8,10 +8,10 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-var db *gorm.DB
+var DB *gorm.DB
 
 func init() {
-	db = mysql.GormDB
+	DB = mysql.GormDB
 }
 
 type IBaseModel interface {

@@ -9,7 +9,11 @@ import (
 	"gin_graphql/app/models"
 	"gin_graphql/graph/generated"
 	"gin_graphql/graph/model"
+	"log"
 	"strconv"
+	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 func (r *meetupResolver) User(ctx context.Context, obj *models.Meetup) (*models.User, error) {
@@ -17,12 +21,57 @@ func (r *meetupResolver) User(ctx context.Context, obj *models.Meetup) (*models.
 	return user.GetUserByID(obj.UserID)
 }
 
+func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInput) (*model.AuthResponse, error) {
+	var user *models.User
+	_, err := user.GetUserByEmail(input.Email)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+
+	_, err = user.GetUserByAccount(input.Account)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, ErrAccountUsed
+	}
+
+	user = &models.User{
+		Account: input.Account,
+		Email:   input.Email,
+	}
+
+	if input.Password != input.ConfirmPassword {
+		return nil, ErrWrongPassword
+	}
+	err = user.HashPassword(input.Password)
+	if err != nil {
+		log.Printf("error while hashing password: %v", err)
+		return nil, ErrUnkown
+	}
+
+	_, err = user.Create(user)
+	if err != nil {
+		log.Printf("error while create user: %v", err)
+		return nil, ErrUnkown
+	}
+
+	// TODO: 產生token
+	expiredAt := time.Now().Add(time.Hour * 24 * 7) // a week
+	authToken := &model.AuthToken{
+		AccessToken: "gogopowerkimi",
+		ExpiredAt:   expiredAt,
+	}
+
+	return &model.AuthResponse{
+		AuthToken: authToken,
+		User:      user,
+	}, nil
+}
+
 func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeetup) (*models.Meetup, error) {
 	if len(input.Name) < 3 {
-		return nil, errors.New("Name not long enough")
+		return nil, ErrNameNotLongEnough
 	}
 	if len(input.Description) < 3 {
-		return nil, errors.New("Description not long enough")
+		return nil, ErrDescriptionNotLongEnough
 	}
 	meetup := &models.Meetup{
 		Name:        input.Name,
@@ -58,8 +107,7 @@ func (r *mutationResolver) DeleteMeetUp(ctx context.Context, id string) (bool, e
 }
 
 func (r *queryResolver) Meetups(ctx context.Context, filter *model.MeetupFilter, limit *int, offset *int) ([]*models.Meetup, error) {
-	var meetups models.Meetup
-	return meetups.Get(filter, limit, offset)
+	return model.GetMeetups(filter, limit, offset)
 }
 
 func (r *queryResolver) User(ctx context.Context, id string) (*models.User, error) {
