@@ -398,12 +398,10 @@ input MeetupFilter {
 }
 
 input RegisterInput {
-  username: String!
+  account: String!
   email: String!
   password: String!
   confirmPassword: String!
-  firstName: String!
-  lastName: String!
 }
 
 type Query {
@@ -2549,11 +2547,11 @@ func (ec *executionContext) unmarshalInputRegisterInput(ctx context.Context, obj
 
 	for k, v := range asMap {
 		switch k {
-		case "username":
+		case "account":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
-			it.Username, err = ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("account"))
+			it.Account, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2578,22 +2576,6 @@ func (ec *executionContext) unmarshalInputRegisterInput(ctx context.Context, obj
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("confirmPassword"))
 			it.ConfirmPassword, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "firstName":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstName"))
-			it.FirstName, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "lastName":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastName"))
-			it.LastName, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}

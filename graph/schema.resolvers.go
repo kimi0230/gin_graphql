@@ -6,11 +6,14 @@ package graph
 import (
 	"context"
 	"errors"
-	"fmt"
 	"gin_graphql/app/models"
 	"gin_graphql/graph/generated"
 	"gin_graphql/graph/model"
+	"log"
 	"strconv"
+	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 func (r *meetupResolver) User(ctx context.Context, obj *models.Meetup) (*models.User, error) {
@@ -19,15 +22,56 @@ func (r *meetupResolver) User(ctx context.Context, obj *models.Meetup) (*models.
 }
 
 func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInput) (*model.AuthResponse, error) {
-	panic(fmt.Errorf("not implemented"))
+	var user *models.User
+	_, err := user.GetUserByEmail(input.Email)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+
+	_, err = user.GetUserByAccount(input.Account)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, ErrAccountUsed
+	}
+
+	user = &models.User{
+		Account: input.Account,
+		Email:   input.Email,
+	}
+
+	if input.Password != input.ConfirmPassword {
+		return nil, ErrWrongPassword
+	}
+	err = user.HashPassword(input.Password)
+	if err != nil {
+		log.Printf("error while hashing password: %v", err)
+		return nil, ErrUnkown
+	}
+
+	_, err = user.Create(user)
+	if err != nil {
+		log.Printf("error while create user: %v", err)
+		return nil, ErrUnkown
+	}
+
+	// TODO: 產生token
+	expiredAt := time.Now().Add(time.Hour * 24 * 7) // a week
+	authToken := &model.AuthToken{
+		AccessToken: "gogopowerkimi",
+		ExpiredAt:   expiredAt,
+	}
+
+	return &model.AuthResponse{
+		AuthToken: authToken,
+		User:      user,
+	}, nil
 }
 
 func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeetup) (*models.Meetup, error) {
 	if len(input.Name) < 3 {
-		return nil, errors.New("name not long enough")
+		return nil, ErrNameNotLongEnough
 	}
 	if len(input.Description) < 3 {
-		return nil, errors.New("description not long enough")
+		return nil, ErrDescriptionNotLongEnough
 	}
 	meetup := &models.Meetup{
 		Name:        input.Name,

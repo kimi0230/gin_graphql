@@ -44,12 +44,10 @@ input MeetupFilter {
 }
 
 input RegisterInput {
-  username: String!
+  account: String!
   email: String!
   password: String!
   confirmPassword: String!
-  firstName: String!
-  lastName: String!
 }
 
 type Query {

@@ -27,6 +27,7 @@ require (
 	github.com/tebeka/strftime v0.1.5 // indirect
 	github.com/vektah/gqlparser/v2 v2.1.0
 	go.uber.org/ratelimit v0.2.0
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4 // indirect
 	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
