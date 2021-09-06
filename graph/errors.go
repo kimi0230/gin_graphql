@@ -9,4 +9,5 @@ var (
 	ErrWrongPassword            = errors.New("wrong password")
 	ErrUnkown                   = errors.New("something went wrong")
 	ErrBadCredentials           = errors.New("email/password combination don't work")
+	ErrUnauthenticated          = errors.New("unauthenticated")
 )

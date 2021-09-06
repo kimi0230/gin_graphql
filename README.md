@@ -101,6 +101,7 @@ go mod download
 4. [EQuimper/youtube-golang-graphql-tutorial][4]
 5. [wtlin1228/unasees][5]
 6. [schema][6]
+7. [gqlgen gin][7]
 
 [1]: https://github.com/99designs/gqlgen 
 "99designs/gqlgen"
@@ -114,3 +115,5 @@ go mod download
 "wtlin1228/unasees"
 [6]: https://graphql.org/learn/schema/
 "schema"
+[7]: https://gqlgen.com/recipes/gin/
+"gqlgen gin"

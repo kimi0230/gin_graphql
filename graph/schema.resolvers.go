@@ -8,6 +8,7 @@ import (
 	"errors"
 	"gin_graphql/app/models"
 	"gin_graphql/graph/generated"
+	"gin_graphql/graph/middleware"
 	"gin_graphql/graph/model"
 	"log"
 	"strconv"
@@ -94,6 +95,12 @@ func (r *mutationResolver) Login(ctx context.Context, input model.LoginInput) (*
 }
 
 func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeetup) (*models.Meetup, error) {
+	currentUser, err := middleware.GetCurrentUserFromCTX(ctx)
+
+	if err != nil {
+		return nil, ErrUnauthenticated
+	}
+
 	if len(input.Name) < 3 {
 		return nil, ErrNameNotLongEnough
 	}
@@ -103,7 +110,7 @@ func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeet
 	meetup := &models.Meetup{
 		Name:        input.Name,
 		Description: input.Description,
-		UserID:      1,
+		UserID:      currentUser.ID,
 	}
 	return meetup.Create(meetup)
 }
