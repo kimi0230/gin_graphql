@@ -8,6 +8,7 @@ import (
 	"errors"
 	"gin_graphql/app/models"
 	"gin_graphql/graph/generated"
+	"gin_graphql/graph/middleware"
 	"gin_graphql/graph/model"
 	"log"
 	"strconv"
@@ -53,12 +54,39 @@ func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInp
 		return nil, ErrUnkown
 	}
 
-	// TODO: 產生token
+	// TODO: 產生 Token >>>
 	expiredAt := time.Now().Add(time.Hour * 24 * 7) // a week
 	authToken := &model.AuthToken{
 		AccessToken: "gogopowerkimi",
 		ExpiredAt:   expiredAt,
 	}
+	// 產生 Token <<<
+
+	return &model.AuthResponse{
+		AuthToken: authToken,
+		User:      user,
+	}, nil
+}
+
+func (r *mutationResolver) Login(ctx context.Context, input model.LoginInput) (*model.AuthResponse, error) {
+	var user *models.User
+	user, err := user.GetUserByEmail(input.Email)
+	if err != nil {
+		return nil, ErrBadCredentials
+	}
+
+	err = user.ComparePassword(input.Password)
+	if err != nil {
+		return nil, ErrBadCredentials
+	}
+
+	// TODO: 取得 Token >>>
+	expiredAt := time.Now().Add(time.Hour * 24 * 7) // a week
+	authToken := &model.AuthToken{
+		AccessToken: "gogopowerkimi",
+		ExpiredAt:   expiredAt,
+	}
+	// 產生 Token <<<
 
 	return &model.AuthResponse{
 		AuthToken: authToken,
@@ -67,6 +95,12 @@ func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInp
 }
 
 func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeetup) (*models.Meetup, error) {
+	currentUser, err := middleware.GetCurrentUserFromCTX(ctx)
+
+	if err != nil {
+		return nil, ErrUnauthenticated
+	}
+
 	if len(input.Name) < 3 {
 		return nil, ErrNameNotLongEnough
 	}
@@ -76,7 +110,7 @@ func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeet
 	meetup := &models.Meetup{
 		Name:        input.Name,
 		Description: input.Description,
-		UserID:      1,
+		UserID:      currentUser.ID,
 	}
 	return meetup.Create(meetup)
 }
