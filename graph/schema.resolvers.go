@@ -53,12 +53,39 @@ func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInp
 		return nil, ErrUnkown
 	}
 
-	// TODO: 產生token
+	// TODO: 產生 Token >>>
 	expiredAt := time.Now().Add(time.Hour * 24 * 7) // a week
 	authToken := &model.AuthToken{
 		AccessToken: "gogopowerkimi",
 		ExpiredAt:   expiredAt,
 	}
+	// 產生 Token <<<
+
+	return &model.AuthResponse{
+		AuthToken: authToken,
+		User:      user,
+	}, nil
+}
+
+func (r *mutationResolver) Login(ctx context.Context, input model.LoginInput) (*model.AuthResponse, error) {
+	var user *models.User
+	user, err := user.GetUserByEmail(input.Email)
+	if err != nil {
+		return nil, ErrBadCredentials
+	}
+
+	err = user.ComparePassword(input.Password)
+	if err != nil {
+		return nil, ErrBadCredentials
+	}
+
+	// TODO: 取得 Token >>>
+	expiredAt := time.Now().Add(time.Hour * 24 * 7) // a week
+	authToken := &model.AuthToken{
+		AccessToken: "gogopowerkimi",
+		ExpiredAt:   expiredAt,
+	}
+	// 產生 Token <<<
 
 	return &model.AuthResponse{
 		AuthToken: authToken,

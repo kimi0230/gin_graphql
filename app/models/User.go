@@ -29,6 +29,12 @@ func (u *User) HashPassword(password string) error {
 	return nil
 }
 
+func (u *User) ComparePassword(password string) error {
+	bytePassword := []byte(password)
+	byteHashedPassword := []byte(u.Password)
+	return bcrypt.CompareHashAndPassword(byteHashedPassword, bytePassword)
+}
+
 func (u *User) Create(user *User) (*User, error) {
 	if err := DB.Create(&user).Error; err != nil {
 		return nil, err
