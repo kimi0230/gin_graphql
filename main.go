@@ -79,6 +79,7 @@ func GraphqlHandler() gin.HandlerFunc {
 	c := generated.Config{Resolvers: &graph.Resolver{}}
 	// Schema Directive
 	c.Directives.IsAuthenticated = directives.IsAuthenticated
+	c.Directives.HasRole = directives.HasRole
 
 	// srv := glmiddleware.AuthMiddleware(handler.NewDefaultServer(generated.NewExecutableSchema(c)))
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(c))

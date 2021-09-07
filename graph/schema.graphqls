@@ -60,12 +60,19 @@ type Query {
   user(id: ID!): User! @isAuthenticated
 }
 
+# @directives 順序最後面的先跑
 type Mutation {
   register(input: RegisterInput!): AuthResponse!
   login(input: LoginInput!): AuthResponse! 
   createMeetup(input: NewMeetup!): Meetup! @isAuthenticated
-  updateMeetup(id: ID!, input: UpdateMeetup!): Meetup!
-  deleteMeetUp(id: ID!): Boolean!
+  updateMeetup(id: ID!, input: UpdateMeetup!): Meetup! 
+  deleteMeetUp(id: ID!): Boolean! @hasRole(role: ADMIN) @isAuthenticated 
+}
+
+enum Role {
+  ADMIN
+  USER
 }
 
 directive @isAuthenticated on FIELD_DEFINITION
+directive @hasRole(role: Role!) on FIELD_DEFINITION
