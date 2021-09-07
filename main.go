@@ -7,6 +7,7 @@ import (
 
 	"gin_graphql/app/validation/customValidateV9"
 	"gin_graphql/graph"
+	"gin_graphql/graph/directives"
 	"gin_graphql/graph/generated"
 	"gin_graphql/routes"
 	"os"
@@ -75,7 +76,12 @@ func PlaygroundHandler(path string) gin.HandlerFunc {
 }
 
 func GraphqlHandler() gin.HandlerFunc {
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	c := generated.Config{Resolvers: &graph.Resolver{}}
+	// Schema Directive
+	c.Directives.IsAuthenticated = directives.IsAuthenticated
+
+	// srv := glmiddleware.AuthMiddleware(handler.NewDefaultServer(generated.NewExecutableSchema(c)))
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(c))
 
 	return func(c *gin.Context) {
 		srv.ServeHTTP(c.Writer, c.Request)
@@ -140,7 +146,7 @@ func main() {
 
 	// gin 的 router 結合 graphql
 	r.GET("/graphql", PlaygroundHandler(graphQLPath))
-	r.POST("/graphql"+graphQLPath, glmiddleware.AuthMiddleware(), GraphqlHandler())
+	r.POST("/graphql"+graphQLPath, glmiddleware.AuthMiddlewareGin(), GraphqlHandler())
 	// r.POST("/graphql"+graphQLPath, GraphqlHandler())
 
 	// Listen and Server

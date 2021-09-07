@@ -56,14 +56,16 @@ input LoginInput {
 }
 
 type Query {
-  meetups(filter: MeetupFilter, limit: Int = 10, offset: Int = 0): [Meetup!]!
-  user(id: ID!): User!
+  meetups(filter: MeetupFilter, limit: Int = 10, offset: Int = 0): [Meetup!]! 
+  user(id: ID!): User! @isAuthenticated
 }
 
 type Mutation {
   register(input: RegisterInput!): AuthResponse!
-  login(input: LoginInput!): AuthResponse!
-  createMeetup(input: NewMeetup!): Meetup!
+  login(input: LoginInput!): AuthResponse! 
+  createMeetup(input: NewMeetup!): Meetup! @isAuthenticated
   updateMeetup(id: ID!, input: UpdateMeetup!): Meetup!
   deleteMeetUp(id: ID!): Boolean!
 }
+
+directive @isAuthenticated on FIELD_DEFINITION

@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"gin_graphql/app/models"
 	"gin_graphql/graph/model"
 	"strconv"
@@ -44,6 +45,7 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
+	IsAuthenticated func(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error)
 }
 
 type ComplexityRoot struct {
@@ -425,17 +427,18 @@ input LoginInput {
 
 type Query {
   meetups(filter: MeetupFilter, limit: Int = 10, offset: Int = 0): [Meetup!]!
-  user(id: ID!): User!
+  user(id: ID!): User! @isAuthenticated
 }
 
 type Mutation {
   register(input: RegisterInput!): AuthResponse!
-  login(input: LoginInput!): AuthResponse!
-  createMeetup(input: NewMeetup!): Meetup!
+  login(input: LoginInput!): AuthResponse! 
+  createMeetup(input: NewMeetup!): Meetup! @isAuthenticated
   updateMeetup(id: ID!, input: UpdateMeetup!): Meetup!
   deleteMeetUp(id: ID!): Boolean!
 }
-`, BuiltIn: false},
+
+directive @isAuthenticated on FIELD_DEFINITION`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -1016,8 +1019,28 @@ func (ec *executionContext) _Mutation_createMeetup(ctx context.Context, field gr
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateMeetup(rctx, args["input"].(model.NewMeetup))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().CreateMeetup(rctx, args["input"].(model.NewMeetup))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			if ec.directives.IsAuthenticated == nil {
+				return nil, errors.New("directive isAuthenticated is not implemented")
+			}
+			return ec.directives.IsAuthenticated(ctx, nil, directive0)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.Meetup); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *gin_graphql/app/models.Meetup`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1184,8 +1207,28 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().User(rctx, args["id"].(string))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().User(rctx, args["id"].(string))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			if ec.directives.IsAuthenticated == nil {
+				return nil, errors.New("directive isAuthenticated is not implemented")
+			}
+			return ec.directives.IsAuthenticated(ctx, nil, directive0)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.User); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *gin_graphql/app/models.User`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)

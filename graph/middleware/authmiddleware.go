@@ -7,6 +7,7 @@ import (
 	"gin_graphql/app/models"
 	ginServices "gin_graphql/app/services/ginService"
 	"gin_graphql/config/errorCode"
+	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -18,15 +19,28 @@ type HeaderValid struct {
 	Authorization string `json:"authorization" form:"authorization"  binding:"required"`
 }
 
-func AuthMiddleware() gin.HandlerFunc {
+func AuthMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		auth := r.Header.Get("Authorization")
+		if auth != "" {
+			// Write your fancy token introspection logic here and if valid user then pass appropriate key in header
+			// IMPORTANT: DO NOT HANDLE UNAUTHORIZED USER HERE
+			ctx = context.WithValue(ctx, CurrentUserKey, auth)
+		}
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
+
+func AuthMiddlewareGin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		// TODO: 檢查 Header
 		var reqJSON HeaderValid
-		// if bindErr := c.ShouldBindHeader(&reqJSON); bindErr != nil {
-		// 	c.Abort()
-		// 	return
-		// }
+		if bindErr := c.ShouldBindHeader(&reqJSON); bindErr != nil {
+			c.Next()
+			return
+		}
 
 		token, err := stripBearerPrefixFromToken(reqJSON.Authorization)
 		if err != nil {
