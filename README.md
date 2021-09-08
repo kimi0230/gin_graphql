@@ -1,5 +1,5 @@
 # Gin GraphQL
-A GraphQL server with Golang, gorm, gqlgen.
+A GraphQL server with Golang, [gorm][10], [gqlgen][1], [go-playground/validator][11].
 
 ## Build Server
 Copy `.env.example` to `.env` and `.env.dev`
@@ -18,6 +18,9 @@ make build
 # start server
 .build/gin_graphql
 ```
+### URL
+* GraphQL Playground: http://localhost:5566/graphql
+* GraphQL Query: http://localhost:5566/graphql/query
 
 ---
 ## Notes
@@ -145,6 +148,9 @@ go mod download
 6. [schema][6]
 7. [gqlgen gin][7]
 8. [blog.laisky.com][8]
+9. [qlgen-custom-data-validation][9]
+10. [gorm][10]
+11. [go-playground/validator][11]
 
 [1]: https://github.com/99designs/gqlgen 
 "99designs/gqlgen"
@@ -161,3 +167,10 @@ go mod download
 [7]: https://gqlgen.com/recipes/gin/
 "gqlgen gin"
 [8]: https://blog.laisky.com/p/gqlgen/#%E5%AE%9A%E4%B9%89+schema-Hfxfd
+"blog.laisky.com"
+[9]: https://david-yappeter.medium.com/gqlgen-custom-data-validation-part-1-7de8ef92de4c
+"qlgen-custom-data-validation"
+[10]: https://gorm.io/index.html
+"gorm"
+[11]: https://github.com/go-playground/validator
+"go-playground/validator"

@@ -44,10 +44,10 @@ input MeetupFilter {
 }
 
 input RegisterInput {
-  account: String!
-  email: String!
-  password: String!
-  confirmPassword: String!
+  account: String! @binding(constraint: "required,max=20")
+  email: String! @binding(constraint: "required,max=50,email")
+  password: String! @binding(constraint: "required,max=16")
+  confirmPassword: String! @binding(constraint: "required,max=16")
 }
 
 input LoginInput {
@@ -56,17 +56,17 @@ input LoginInput {
 }
 
 type Query {
-  meetups(filter: MeetupFilter, limit: Int = 10, offset: Int = 0): [Meetup!]! 
+  meetups(filter: MeetupFilter, limit: Int = 10, offset: Int = 0): [Meetup!]!
   user(id: ID!): User! @isAuthenticated
 }
 
 # @directives 順序最後面的先跑
 type Mutation {
   register(input: RegisterInput!): AuthResponse!
-  login(input: LoginInput!): AuthResponse! 
+  login(input: LoginInput!): AuthResponse!
   createMeetup(input: NewMeetup!): Meetup! @isAuthenticated
-  updateMeetup(id: ID!, input: UpdateMeetup!): Meetup! 
-  deleteMeetUp(id: ID!): Boolean! @hasRole(role: ADMIN) @isAuthenticated 
+  updateMeetup(id: ID!, input: UpdateMeetup!): Meetup!
+  deleteMeetUp(id: ID!): Boolean! @hasRole(role: ADMIN) @isAuthenticated
 }
 
 enum Role {
@@ -76,3 +76,6 @@ enum Role {
 
 directive @isAuthenticated on FIELD_DEFINITION
 directive @hasRole(role: Role!) on FIELD_DEFINITION
+directive @binding(
+  constraint: String!
+) on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION
