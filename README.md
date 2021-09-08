@@ -1,5 +1,5 @@
 # Gin GraphQL
-A GraphQL server with Golang, gorm, gqlgen.
+A GraphQL server with Golang, [gorm][10], [gqlgen][1], [go-playground/validator][11].
 
 ## Build Server
 Copy `.env.example` to `.env` and `.env.dev`
@@ -18,6 +18,9 @@ make build
 # start server
 .build/gin_graphql
 ```
+### URL
+* GraphQL Playground: http://localhost:5566/graphql
+* GraphQL Query: http://localhost:5566/graphql/query
 
 ---
 ## Notes
@@ -56,6 +59,48 @@ At the top of our resolver.go, between package and import, add the following lin
 ```
 This magic comment tells go generate what command to run when we want to regenerate our code. 
 To run go generate recursively over your entire project, use this command:`go generate ./...`
+
+
+#### Implement the directive
+#####  Declare it in the schema
+Path: `graph/schema.graphqls`.
+```Graphql
+type Mutation {
+    deleteMeetUp(id: ID!): Boolean! @hasRole(role: ADMIN) @isAuthenticated
+}
+
+directive @isAuthenticated on FIELD_DEFINITION
+directive @hasRole(role: Role!) on FIELD_DEFINITION
+```
+
+##### Implement
+Path: `graph/directives/directiveAuth.go` 
+```go
+func IsAuthenticated(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error) {
+	ctxUserID := ctx.Value(CurrentUserKey)
+	if ctxUserID == nil {
+		return nil, graph.ErrUnauthenticated
+	}
+	return next(ctx)
+}
+```
+
+##### Pass it in when start server
+Path: `main.go`
+```go
+c := generated.Config{Resolvers: &graph.Resolver{}}
+// Schema Directive
+c.Directives.IsAuthenticated = directives.IsAuthenticated
+c.Directives.HasRole = directives.HasRole
+
+srv := handler.NewDefaultServer(generated.NewExecutableSchema(c))
+
+return func(c *gin.Context) {
+    srv.ServeHTTP(c.Writer, c.Request)
+}
+```
+
+
 
 
 #### Modify schema
@@ -103,6 +148,9 @@ go mod download
 6. [schema][6]
 7. [gqlgen gin][7]
 8. [blog.laisky.com][8]
+9. [qlgen-custom-data-validation][9]
+10. [gorm][10]
+11. [go-playground/validator][11]
 
 [1]: https://github.com/99designs/gqlgen 
 "99designs/gqlgen"
@@ -119,3 +167,10 @@ go mod download
 [7]: https://gqlgen.com/recipes/gin/
 "gqlgen gin"
 [8]: https://blog.laisky.com/p/gqlgen/#%E5%AE%9A%E4%B9%89+schema-Hfxfd
+"blog.laisky.com"
+[9]: https://david-yappeter.medium.com/gqlgen-custom-data-validation-part-1-7de8ef92de4c
+"qlgen-custom-data-validation"
+[10]: https://gorm.io/index.html
+"gorm"
+[11]: https://github.com/go-playground/validator
+"go-playground/validator"
