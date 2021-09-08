@@ -58,6 +58,48 @@ This magic comment tells go generate what command to run when we want to regener
 To run go generate recursively over your entire project, use this command:`go generate ./...`
 
 
+#### Implement the directive
+#####  Declare it in the schema
+Path: `graph/schema.graphqls`.
+```Graphql
+type Mutation {
+    deleteMeetUp(id: ID!): Boolean! @hasRole(role: ADMIN) @isAuthenticated
+}
+
+directive @isAuthenticated on FIELD_DEFINITION
+directive @hasRole(role: Role!) on FIELD_DEFINITION
+```
+
+##### Implement
+Path: `graph/directives/directiveAuth.go` 
+```go
+func IsAuthenticated(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error) {
+	ctxUserID := ctx.Value(CurrentUserKey)
+	if ctxUserID == nil {
+		return nil, graph.ErrUnauthenticated
+	}
+	return next(ctx)
+}
+```
+
+##### Pass it in when start server
+Path: `main.go`
+```go
+c := generated.Config{Resolvers: &graph.Resolver{}}
+// Schema Directive
+c.Directives.IsAuthenticated = directives.IsAuthenticated
+c.Directives.HasRole = directives.HasRole
+
+srv := handler.NewDefaultServer(generated.NewExecutableSchema(c))
+
+return func(c *gin.Context) {
+    srv.ServeHTTP(c.Writer, c.Request)
+}
+```
+
+
+
+
 #### Modify schema
 1. modify your schema `graph/schema.graphqls`
 2. run gqlgen `./script/gqlgen.sh` or `go run -v github.com/99designs/gqlgen`
