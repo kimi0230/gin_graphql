@@ -22,6 +22,8 @@ make build
 * GraphQL Playground: http://localhost:5566/graphql
 * GraphQL Query: http://localhost:5566/graphql/query
 
+![](https://github.com/kimi0230/gin_graphql/blob/master/playground.png)
+
 ---
 ## Notes
 ### GraphQL 
