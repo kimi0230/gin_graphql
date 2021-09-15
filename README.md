@@ -153,6 +153,7 @@ go mod download
 9. [qlgen-custom-data-validation][9]
 10. [gorm][10]
 11. [go-playground/validator][11]
+12. [graphql-spec][12]
 
 [1]: https://github.com/99designs/gqlgen 
 "99designs/gqlgen"
@@ -176,3 +177,5 @@ go mod download
 "gorm"
 [11]: https://github.com/go-playground/validator
 "go-playground/validator"
+[12]: https://github.com/graphql/graphql-spec/blob/main/spec/Section%203%20--%20Type%20System.md#descriptions
+"graphql-spec"
