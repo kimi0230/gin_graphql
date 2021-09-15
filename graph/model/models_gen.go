@@ -16,6 +16,7 @@ type AuthResponse struct {
 }
 
 type AuthToken struct {
+	// accessToken 描述在這
 	AccessToken string    `json:"accessToken"`
 	ExpiredAt   time.Time `json:"expiredAt"`
 }

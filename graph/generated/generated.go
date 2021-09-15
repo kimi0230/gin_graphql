@@ -375,6 +375,9 @@ var sources = []*ast.Source{
 # https://gqlgen.com/getting-started/
 scalar Time
 
+"""
+User Type 描述在這
+"""
 type User {
   id: ID!
   account: String!
@@ -392,6 +395,7 @@ type Meetup {
 }
 
 type AuthToken {
+  "accessToken 描述在這"
   accessToken: String!
   expiredAt: Time!
 }
