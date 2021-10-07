@@ -1,0 +1,82 @@
+basePath: /api/v1
+definitions:
+  ginServices.ResponseObj:
+    properties:
+      data: {}
+      result:
+        $ref: '#/definitions/ginServices.ResultObj'
+    type: object
+  ginServices.ResultObj:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  models.Meetup:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: integer
+    type: object
+host: localhost:5566
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API With Gin
+  version: "1.0"
+paths:
+  /meetups/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get string by ID
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Meetup ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginServices.ResponseObj'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.Meetup'
+                  type: array
+              type: object
+      summary: Show an meetup
+      tags:
+      - meetups
+swagger: "2.0"
+x-extension-openapi:
+  example: value on a json format

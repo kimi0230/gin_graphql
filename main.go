@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net"
 	"net/http"
 	"time"
@@ -12,6 +13,8 @@ import (
 	"gin_graphql/routes"
 	"os"
 
+	_ "gin_graphql/docs"
+
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-contrib/pprof"
@@ -19,6 +22,8 @@ import (
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
 	"github.com/rifflock/lfshook"
 	log "github.com/sirupsen/logrus"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/joho/godotenv"
 	_ "github.com/joho/godotenv"
@@ -90,6 +95,24 @@ func GraphqlHandler() gin.HandlerFunc {
 	}
 }
 
+/*
+@title Swagger Example API With Gin
+@version 1.0
+@description This is a sample server celler server.
+@termsOfService http://swagger.io/terms/
+
+@contact.name API Support
+@contact.url http://www.swagger.io/support
+@contact.email support@swagger.io
+
+@license.name Apache 2.0
+@license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+@host localhost:5566
+@BasePath /api/v1
+@query.collection.format multi
+@x-extension-openapi {"example": "value on a json format"}
+*/
 func main() {
 	// defer db.GormDB.Close()
 	// defer db.SqlDB.Close()
@@ -154,12 +177,14 @@ func main() {
 	// Listen and Server
 	port := os.Getenv("APP_URL")
 	addrs, _ := net.InterfaceAddrs()
-	log.WithFields(log.Fields{
-		"ip":   addrs[0],
-		"port": port,
-		"env":  env,
-	}).Info("===== Start Server ===== ")
 
+	// swagger
+	if mode := gin.Mode(); mode == gin.DebugMode {
+		swagURL := ginSwagger.URL(fmt.Sprintf("http://%s/swagger/doc.json", "localhost:5566"))
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, swagURL))
+	}
+
+	// PPROF
 	if os.Getenv("PPROF") == "1" {
 		// pprof.Register(r) // 性能
 		adminGroup := r.Group("/admin", func(c *gin.Context) {
@@ -172,6 +197,11 @@ func main() {
 		pprof.RouteRegister(adminGroup, "pprof")
 	}
 
+	log.WithFields(log.Fields{
+		"ip":   addrs[0],
+		"port": port,
+		"env":  env,
+	}).Info("===== Start Server ===== ")
 	log.Fatal(http.ListenAndServe(port, r))
 
 }

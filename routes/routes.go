@@ -2,6 +2,7 @@ package routes
 
 import (
 	"gin_graphql/app/controllers/GuideController"
+	"gin_graphql/app/controllers/MeetupController"
 	"gin_graphql/app/middleware/headerAuth"
 	"gin_graphql/app/middleware/rateLimit"
 
@@ -23,6 +24,8 @@ func SetupRouter() *gin.Engine {
 	apiv1Group.POST("/guide", GuideController.PostGuide)
 	apiv1Group.PUT("/guide/:id", GuideController.PutGuide)
 	apiv1Group.DELETE("/guide/:id", GuideController.DeleteGuide)
+	apiv1Group.GET("/meetups", MeetupController.GetMeetup)
+	apiv1Group.GET("/meetups/:id", MeetupController.GetMeetup)
 	// v1 <<<
 	// RESTful <<<
 

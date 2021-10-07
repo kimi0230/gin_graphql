@@ -8,11 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-/**
- * @description: GET
- * @param {*gin.Context} c
- * @return {*}
- */
 func GetGuide(c *gin.Context) {
 	// 定義接收格式
 	type structRequest struct{}
