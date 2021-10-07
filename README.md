@@ -117,6 +117,10 @@ return func(c *gin.Context) {
 `make migrate mode={auto | drop | refresh}` or `go run  database/migrate.go -m=auto`
 
 ---
+### Swagger API Doc
+http://localhost:5566/swagger/index.html
+
+---
 ### Go commands
 ```shell
 # Initiation Go project
