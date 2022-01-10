@@ -13,8 +13,13 @@ var (
 )
 
 var tables []interface{} = []interface{}{
-	models.User{},
-	models.Meetup{},
+	// models.User{},
+	// models.Meetup{},
+	models.Staff{},
+	models.StaffRole{},
+	models.Role{},
+	models.RolePermission{},
+	models.Permission{},
 }
 
 func init() {

@@ -15,6 +15,12 @@ var BAD_REQUEST = map[string]interface{}{
 	"message":  "Bad Request",
 	"httpCode": http.StatusBadRequest,
 }
+var FORBIDDEN_REQUEST = map[string]interface{}{
+	"code":     "2403",
+	"status":   false,
+	"message":  "Forbidden Request",
+	"httpCode": http.StatusForbidden,
+}
 
 var PARAMS_INVALID = map[string]interface{}{
 	"code":     "4000",
