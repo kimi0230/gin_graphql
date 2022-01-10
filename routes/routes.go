@@ -5,6 +5,7 @@ import (
 	"gin_graphql/app/controllers/MeetupController"
 	"gin_graphql/app/middleware/headerAuth"
 	"gin_graphql/app/middleware/rateLimit"
+	"gin_graphql/app/middleware/staffRoleAuth"
 
 	"net/http"
 	"os"
@@ -35,6 +36,10 @@ func SetupRouter() *gin.Engine {
 
 	// Kimi 測試區 >>>
 	kimiGroup := r.Group("/kimi", rateLimit.RateLimitLeaky())
+	kimiGroup.GET("/role", staffRoleAuth.VerifyStaffAuth(), func(c *gin.Context) {
+		// 測試 staff role 驗證 中間層
+		c.String(http.StatusOK, "ok")
+	})
 	kimiGroup.GET("/", func(c *gin.Context) {
 		result := map[string]interface{}{
 			"Data": map[string]interface{}{
