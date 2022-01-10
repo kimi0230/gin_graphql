@@ -161,7 +161,6 @@ func main() {
 		log.Fatal(http.ListenAndServe(":"+graphQLPort, nil))
 	}()
 	*/
-
 	// GraphQL Server <<<
 
 	// GIN binding validation version
@@ -169,19 +168,24 @@ func main() {
 
 	r := routes.SetupRouter()
 
-	// gin 的 router 結合 graphql
-	r.GET("/graphql", PlaygroundHandler(graphQLPath))
-	r.POST("/graphql"+graphQLPath, glmiddleware.AuthMiddlewareGin(), GraphqlHandler())
-	// r.POST("/graphql"+graphQLPath, GraphqlHandler())
+	if os.Getenv("GRAPHQL") == "1" {
+		// gin 的 router 結合:  GraphQL palyground : http://localhost:5566/graphql
+		r.GET("/_graphql", PlaygroundHandler(graphQLPath))
+		// GraphQL query : http://localhost:5566/graphql/query
+		r.POST("/_graphql"+graphQLPath, glmiddleware.AuthMiddlewareGin(), GraphqlHandler())
+		// r.POST("/graphql"+graphQLPath, GraphqlHandler())
+	}
 
 	// Listen and Server
 	port := os.Getenv("APP_URL")
 	addrs, _ := net.InterfaceAddrs()
 
-	// swagger
-	if mode := gin.Mode(); mode == gin.DebugMode {
-		swagURL := ginSwagger.URL(fmt.Sprintf("http://%s/swagger/doc.json", "localhost:5566"))
-		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, swagURL))
+	if os.Getenv("SWAGGER") == "1" {
+		// swagger : http://localhost:5566/swagger/index.html
+		if mode := gin.Mode(); mode == gin.DebugMode {
+			swagURL := ginSwagger.URL(fmt.Sprintf("http://%s/swagger/doc.json", "localhost:5566"))
+			r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, swagURL))
+		}
 	}
 
 	// PPROF

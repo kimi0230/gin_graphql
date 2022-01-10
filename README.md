@@ -120,6 +120,25 @@ return func(c *gin.Context) {
 ### Swagger API Doc
 http://localhost:5566/swagger/index.html
 
+##### init
+`swag init`
+
+### PPROF
+```shell
+[GIN-debug] GET    /admin/pprof/             --> github.com/gin-contrib/pprof.pprofHandler.func1 (4 handlers)
+[GIN-debug] GET    /admin/pprof/cmdline      --> github.com/gin-contrib/pprof.pprofHandler.func1 (4 handlers)
+[GIN-debug] GET    /admin/pprof/profile      --> github.com/gin-contrib/pprof.pprofHandler.func1 (4 handlers)
+[GIN-debug] POST   /admin/pprof/symbol       --> github.com/gin-contrib/pprof.pprofHandler.func1 (4 handlers)
+[GIN-debug] GET    /admin/pprof/symbol       --> github.com/gin-contrib/pprof.pprofHandler.func1 (4 handlers)
+[GIN-debug] GET    /admin/pprof/trace        --> github.com/gin-contrib/pprof.pprofHandler.func1 (4 handlers)
+[GIN-debug] GET    /admin/pprof/allocs       --> github.com/gin-contrib/pprof.pprofHandler.func1 (4 handlers)
+[GIN-debug] GET    /admin/pprof/block        --> github.com/gin-contrib/pprof.pprofHandler.func1 (4 handlers)
+[GIN-debug] GET    /admin/pprof/goroutine    --> github.com/gin-contrib/pprof.pprofHandler.func1 (4 handlers)
+[GIN-debug] GET    /admin/pprof/heap         --> github.com/gin-contrib/pprof.pprofHandler.func1 (4 handlers)
+[GIN-debug] GET    /admin/pprof/mutex        --> github.com/gin-contrib/pprof.pprofHandler.func1 (4 handlers)
+[GIN-debug] GET    /admin/pprof/threadcreate --> github.com/gin-contrib/pprof.pprofHandler.func1 (4 handlers)
+```
+
 ---
 ### Go commands
 ```shell
