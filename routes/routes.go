@@ -6,6 +6,7 @@ import (
 	"gin_graphql/app/middleware/headerAuth"
 	"gin_graphql/app/middleware/rateLimit"
 	"gin_graphql/app/middleware/staffRoleAuth"
+	captchaservice "gin_graphql/app/services/captchaService"
 
 	"net/http"
 	"os"
@@ -33,6 +34,16 @@ func SetupRouter() *gin.Engine {
 	// GraphQL >>>
 
 	// GraphQL <<<
+
+	// 驗證碼
+	r.GET("/captcha", func(c *gin.Context) {
+		c.JSON(http.StatusOK, captchaservice.New())
+	})
+
+	r.GET("/captcha/:captchaId", func(c *gin.Context) {
+		captchaId := c.Param("captchaId")
+		captchaservice.GetImage(c, captchaId)
+	})
 
 	// Kimi 測試區 >>>
 	kimiGroup := r.Group("/kimi", rateLimit.RateLimitLeaky())
