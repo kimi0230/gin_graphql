@@ -1,4 +1,4 @@
-package captchaservice
+package captchacontroller
 
 import (
 	"bytes"
@@ -27,16 +27,6 @@ func New() CaptchaResponse {
 }
 
 func GetImage(c *gin.Context, captchaId string) {
-	// c.Writer.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-	// c.Writer.Header().Set("Pragma", "no-cache")
-	// c.Writer.Header().Set("Expires", "0")
-	// c.Writer.Header().Set("Content-Type", "image/png")
-	// id := c.Param("captchaId")
-	// id = strings.Replace(id, "/", "", 1)
-	// var content bytes.Buffer
-	// captcha.WriteImage(&content, id, 100, 50) //4位验证码,宽100,高50最清晰
-	// http.ServeContent(c.Writer, c.Request, id+".png", time.Time{}, bytes.NewReader(content.Bytes()))
-
 	fmt.Println("GetCaptchaPng : " + captchaId)
 	ServeHTTP(c.Writer, c.Request)
 }
