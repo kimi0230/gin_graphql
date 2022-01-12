@@ -1,5 +1,10 @@
 package captchaservice
 
+// https://developer.aliyun.com/article/719480
+// https://github.com/dchest/captcha
+// https://book.aikaiyuan.com/golang/www.topgoer.com/gin%E6%A1%86%E6%9E%B6/%E5%85%B6%E4%BB%96/gin%E9%AA%8C%E8%AF%81%E7%A0%81.html
+// https://www.codeleading.com/article/6387979921/
+
 import (
 	"bytes"
 	"fmt"
