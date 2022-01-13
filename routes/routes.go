@@ -1,8 +1,10 @@
 package routes
 
 import (
+	captchacontroller "gin_graphql/app/controllers/CaptchaController"
 	"gin_graphql/app/controllers/GuideController"
 	"gin_graphql/app/controllers/MeetupController"
+	"gin_graphql/app/middleware/captchamiddleware"
 	"gin_graphql/app/middleware/headerAuth"
 	"gin_graphql/app/middleware/rateLimit"
 	"gin_graphql/app/middleware/staffRoleAuth"
@@ -33,6 +35,17 @@ func SetupRouter() *gin.Engine {
 	// GraphQL >>>
 
 	// GraphQL <<<
+
+	// 驗證碼 >>>
+	// dchest/captcha
+	captchaGroup := r.Group("/captcha")
+	// 取得驗證碼圖片路徑
+	captchaGroup.GET("/", captchacontroller.NewCaptchaString)
+	// 取得驗證碼圖片檔案
+	captchaGroup.GET("/:captchaId", captchacontroller.GetCaptcha)
+	// demo 驗證
+	captchaGroup.POST("/verify", captchamiddleware.Verify(), captchacontroller.VerifyCaptcha)
+	// 驗證碼 <<<
 
 	// Kimi 測試區 >>>
 	kimiGroup := r.Group("/kimi", rateLimit.RateLimitLeaky())
