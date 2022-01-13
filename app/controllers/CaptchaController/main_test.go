@@ -1,22 +1,23 @@
 package captchacontroller
 
 import (
+	"reflect"
 	"testing"
 )
 
 var tests = []struct {
-	arg1 string
+	arg1 int
 	want CaptchaResponse
 }{
 	{
-		"123",
+		4,
 		CaptchaResponse{},
 	},
 }
 
-func TestNew(t *testing.T) {
+func TestCaptchaString(t *testing.T) {
 	for _, tt := range tests {
-		if got := New(); got != tt.want {
+		if got := CaptchaString(tt.arg1); reflect.DeepEqual(got, CaptchaResponse{}) {
 			t.Errorf("got = %v \n want = %v \n", got, tt.want)
 		}
 	}
