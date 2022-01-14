@@ -27,7 +27,7 @@ func SetupRouter() *gin.Engine {
 
 	// RESTful >>>
 	// v1 >>>
-	apiv1Group := apiGroup.Group("/v1", rateLimit.RateLimitToken(), headerAuth.VerifyHeaderAuth())
+	apiv1Group := apiGroup.Group("/v1", headerAuth.VerifyHeaderAuth())
 	apiv1Group.GET("/guide", GuideController.GetGuide)
 	apiv1Group.GET("/guide/:id", GuideController.GetGuide)
 	apiv1Group.POST("/guide", GuideController.PostGuide)
