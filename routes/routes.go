@@ -3,11 +3,13 @@ package routes
 import (
 	captchacontroller "gin_graphql/app/controllers/CaptchaController"
 	"gin_graphql/app/controllers/GuideController"
+	"gin_graphql/app/controllers/LoginoutController"
 	"gin_graphql/app/controllers/MeetupController"
 	"gin_graphql/app/middleware/captchamiddleware"
 	"gin_graphql/app/middleware/headerAuth"
 	"gin_graphql/app/middleware/rateLimit"
 	"gin_graphql/app/middleware/staffRoleAuth"
+	jwtservice "gin_graphql/app/services/jwtService"
 
 	"net/http"
 	"os"
@@ -19,9 +21,13 @@ import (
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
+	apiGroup := r.Group("/api", rateLimit.RateLimitToken())
+	apiGroup.POST("/login", LoginoutController.Login)
+	apiGroup.POST("/login/test", jwtservice.VerifyJWTAuth(), LoginoutController.Test)
+
 	// RESTful >>>
 	// v1 >>>
-	apiv1Group := r.Group("/api/v1", rateLimit.RateLimitToken(), headerAuth.VerifyHeaderAuth())
+	apiv1Group := apiGroup.Group("/v1", headerAuth.VerifyHeaderAuth())
 	apiv1Group.GET("/guide", GuideController.GetGuide)
 	apiv1Group.GET("/guide/:id", GuideController.GetGuide)
 	apiv1Group.POST("/guide", GuideController.PostGuide)
