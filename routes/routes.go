@@ -20,6 +20,7 @@ import (
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
+	// r.Use(cors.New(corsConfig.CorsConfig()))
 
 	apiGroup := r.Group("/api", rateLimit.RateLimitToken())
 	apiGroup.POST("/login", LoginoutController.Login)
