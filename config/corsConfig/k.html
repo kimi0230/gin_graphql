@@ -6,7 +6,7 @@
     <script>
         $(document).ready(function () {
             $("button").click(function () {
-                $.get("http://127.0.0.1:5566/kimi", function (data, status) {
+                $.get("http://locakhost:5566/kimi/", function (data, status) {
                     alert("Data: " + data + "\nStatus: " + status);
                 });
             });
