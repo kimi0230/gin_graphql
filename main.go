@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	pubsubservice "gin_graphql/app/services/pubsubService"
 	"gin_graphql/app/validation/customValidateV9"
 	"gin_graphql/graph"
 	"gin_graphql/graph/directives"
@@ -200,6 +201,11 @@ func main() {
 		})
 		pprof.RouteRegister(adminGroup, "pprof")
 	}
+
+	// Local PubSub
+	pubsubserver := pubsubservice.GetPubsubService()
+	pubsubserver.Pong()
+	pubsubserver.Ping()
 
 	log.WithFields(log.Fields{
 		"ip":   addrs[0],

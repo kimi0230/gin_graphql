@@ -1,5 +1,6 @@
 # Gin GraphQL
-A GraphQL server with Golang, [gorm][10], [gqlgen][1], [go-playground/validator][11].
+A GraphQL, RESTful server with Golang, [gorm][10], [gqlgen][1], [go-playground/validator][11].
+Implement PubSub by [github.com/moby/moby/pkg/pubsub](https://github.com/moby/moby/tree/master/pkg/pubsub) created by Docker.
 
 ## Build Server
 Copy `.env.example` to `.env` and `.env.dev`
