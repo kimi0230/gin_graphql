@@ -23,6 +23,9 @@ func CorsConfig() cors.Config {
 	} else if os.Getenv("APP_ENV") == "DEV" {
 		corsConf.AllowAllOrigins = true
 		corsConf.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PUT", "HEAD"}
+	} else {
+		corsConf.AllowAllOrigins = true
+		corsConf.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PUT", "HEAD"}
 	}
 
 	return corsConf

@@ -19,6 +19,8 @@ import (
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
+	// r.Use(cors.Default())
+	r.Use(cors.New(corsConfig.CorsConfig()))
 
 	/***    api v1   ***/
 	apiGroup := r.Group("/api", rateLimit.RateLimitToken())
@@ -53,7 +55,7 @@ func SetupRouter() *gin.Engine {
 
 	/***  Kimi 測試區 ***/
 	kimiGroup := r.Group("/kimi", rateLimit.RateLimitLeaky())
-	kimiGroup.Use(cors.New(corsConfig.CorsConfig()))
+	// kimiGroup.Use(cors.New(corsConfig.CorsConfig()))
 	kimiGroup.GET("/", kimi.Info)
 	kimiGroup.GET("/role", staffRoleAuth.VerifyStaffAuth(), kimi.Ok)
 	/*******************/
