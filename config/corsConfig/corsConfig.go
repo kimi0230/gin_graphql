@@ -11,7 +11,7 @@ func CorsConfig() cors.Config {
 	corsConf := cors.DefaultConfig()
 
 	if os.Getenv("APP_ENV") == "APP" {
-		corsConf.AllowOrigins = []string{"https://metamerce.s3.ap-northeast-1.amazonaws.com"}
+		corsConf.AllowOrigins = []string{"https://github.com"}
 
 		// corsConf.AllowHeaders = []string{"Origin"}
 
@@ -21,6 +21,9 @@ func CorsConfig() cors.Config {
 		// }
 
 	} else if os.Getenv("APP_ENV") == "DEV" {
+		corsConf.AllowAllOrigins = true
+		corsConf.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PUT", "HEAD"}
+	} else {
 		corsConf.AllowAllOrigins = true
 		corsConf.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PUT", "HEAD"}
 	}
