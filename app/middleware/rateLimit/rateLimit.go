@@ -26,7 +26,7 @@ func RateLimitToken() gin.HandlerFunc {
 		// tokenLimit.SetMessage("You have reached maximum request limit.")
 		httpError := tollbooth.LimitByRequest(tokenLimit, c.Writer, c.Request)
 		if httpError != nil {
-			ginServices.GinRespone(c, "", "", errorCode.BAD_REQUEST, httpError)
+			ginServices.GinRespone(c, "", "", errorCode.RATE_LIMIT, httpError)
 			c.Abort()
 			return
 		} else {

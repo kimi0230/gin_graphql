@@ -87,20 +87,20 @@ func VerifyreCAPTCHA() gin.HandlerFunc {
 		}
 		respBody, ok := curlservice.PostJSON(url, sendJSON)
 		if !ok {
-			ginServices.GinRespone(c, reqData, "", errorCode.PARAMS_INVALID, err)
+			ginServices.GinRespone(c, reqData, "", errorCode.BAD_REQUEST, err)
 			c.Abort()
 			return
 		}
 		// 轉 struct
 		var resultJSON reCaptchaRes
 		if err := json.Unmarshal([]byte(respBody), &resultJSON); err != nil {
-			ginServices.GinRespone(c, reqData, "", errorCode.PARAMS_INVALID, err)
+			ginServices.GinRespone(c, reqData, "", errorCode.NOT_ACCEPTABLE, err)
 			c.Abort()
 			return
 		}
 
 		if !resultJSON.Success {
-			ginServices.GinRespone(c, reqData, "", errorCode.PARAMS_INVALID, resultJSON.ErrorCodes)
+			ginServices.GinRespone(c, reqData, "", errorCode.FORBIDDEN, resultJSON.ErrorCodes)
 			c.Abort()
 			return
 		}

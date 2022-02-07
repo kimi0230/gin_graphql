@@ -28,7 +28,7 @@ func VerifyHeaderAuth() gin.HandlerFunc {
 		}
 		headerAuth := strings.Split(reqJSON.Authorization, " ")
 		if headerAuth[0] != "Bearer" {
-			ginServices.GinRespone(c, reqData, "", errorCode.FORBIDDEN, nil)
+			ginServices.GinRespone(c, reqData, "", errorCode.NOT_ACCEPTABLE, nil)
 			c.Abort()
 			return
 		}
