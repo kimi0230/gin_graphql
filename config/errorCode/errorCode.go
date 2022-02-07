@@ -83,7 +83,7 @@ var RATE_LIMIT = map[string]interface{}{
 var REQUEST_TIMEOUT = map[string]interface{}{
 	"code":     "408-API-V1-0001",
 	"status":   false,
-	"message":  "Timeout",
+	"message":  "Timeout or Duplicate",
 	"httpCode": http.StatusRequestTimeout,
 }
 
