@@ -36,7 +36,7 @@ func VerifyStaffAuth() gin.HandlerFunc {
 		var permission permissionStruct
 		sel := `rp.role_id, rp.permission_id, p.title, p.slug, p.active`
 		if err := mysql.GormDB.Table("role_permission as rp").Select(sel).Joins("join permission as p ON p.id=rp.permission_id").Where("p.active=? and p.slug=?", "1", c.Request.URL.Path).Scan(&permission).Error; err != nil {
-			ginServices.GinRespone(c, "", "", errorCode.FORBIDDEN_REQUEST, nil)
+			ginServices.GinRespone(c, "", "", errorCode.FORBIDDEN, nil)
 			c.Abort()
 			return
 		}
