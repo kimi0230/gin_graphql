@@ -170,9 +170,9 @@ func main() {
 	r := routes.SetupRouter()
 
 	if os.Getenv("GRAPHQL") == "1" {
-		// gin 的 router 結合:  GraphQL palyground : http://localhost:5566/graphql
+		// gin 的 router 結合:  GraphQL palyground : http://localhost:5566/_graphql
 		r.GET("/_graphql", PlaygroundHandler(graphQLPath))
-		// GraphQL query : http://localhost:5566/graphql/query
+		// GraphQL query : http://localhost:5566/_graphql/query
 		r.POST("/_graphql"+graphQLPath, glmiddleware.AuthMiddlewareGin(), GraphqlHandler())
 		// r.POST("/graphql"+graphQLPath, GraphqlHandler())
 	}
